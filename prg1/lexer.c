@@ -51,16 +51,18 @@ int lexan() {
 	    }
 
 	    lexbuf[b] = EOS; // just a null terminator '\0'
-						 // now it's a proper string literal
+			     // now it's a proper string literal
 
 		// tie up loose end from looping behavior
 	    if (t != EOF) {
 		ungetc(t, stdin);
 	    }
 
-		// check if it's a new non-terminal and act accordingly
-	    p = lookup(lexbuf);
-	    if (p == -1) {
+		
+	    p = lookup(lexbuf); // this line is how we get our MULT, WHILE,
+				// all those symbols out of the table
+
+	    if (p == -1) { // does it exist in our table yet?
 		//printf("** calling insert\n");
 		p = insert(lexbuf, ID, 0);
 	    }

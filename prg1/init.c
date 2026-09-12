@@ -7,12 +7,22 @@
 
 struct entry keywords[] =
 {
-    {"if", IF, -1}, // Associates the keyword if with the value of IF
-		    // as defined in global. The entries to be completed
-		    // must be defined in the same way here
-		    //
-		    // "keyword", KEYWORD, -1 for keyword
-    // TO BE COMPLETED
+    {"else", ELSE, -1},
+    {"if", IF, -1},
+
+    // Josiah
+    {"while", WHILE, -1},
+    {"return", RET, -1},
+    {"=", EQ, -1},
+    {"+", PLUS, -1},
+    {"-", MINUS, -1},
+    {"*", MULT, -1},
+    {"/", DIV, -1},
+    {"%", MOD, -1},
+
+	// DONE is not included here because lexan() uses that when needed.
+	// It is not a recognized keyword in our grammar	
+
     {0, 0, 0}
 };
 

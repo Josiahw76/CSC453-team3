@@ -213,7 +213,6 @@ stmt() {
 
 	    int test_loc = pc; // Save the current line which is post 
 			       // opening paren
-
 	    expr();
 
 	    if (!match(')')) {
@@ -382,7 +381,7 @@ factor() {
 		error("Variable does not exist");
 	    } else {
 		// to be completed
-		// Greenlight case, but I'm not sure for what
+		// Here, the value of the ID should be emitted
 	    }
 
 	    match(ID);

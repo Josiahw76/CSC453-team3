@@ -32,7 +32,15 @@ main(int argc, char* argv[])
 			printf("INT8");
 			printf(",%d> ", tokenval);
 			break;
-		    // to be completed
+		    case INT16:
+			printf("INT16");
+			printf(",%d> ", tokenval);
+			break;
+		    case INT32:
+			printf("INT32");
+			printf(",%d> ", tokenval);
+			break;
+
 		}
 	    }
 	}

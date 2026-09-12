@@ -13,8 +13,11 @@
 
 #define LEFT_CURLY       '{'
 #define RIGHT_CURLY       '}'
-// To be completed		?					D:
 
+// Josiah
+#define LEFT_PAREN	'('
+#define RIGHT_PAREN	')'
+// I don't think the right paren is necessary, but the left is expected
 
 #define DONE	300
 #define ID	DONE+1
@@ -25,7 +28,20 @@
 
 #define IF	INT32+1
 #define ELSE	IF+1
-// To be completed		what could possibly go in here
+
+// Josiah
+#define WHILE	ELSE+1
+#define RET	WHILE+1
+#define EQ	RET+1
+#define PLUS	EQ+1
+#define MINUS	PLUS+1
+#define MULT	MINUS+1
+#define DIV	MULT+1
+#define MOD	DIV+1
+
+
+// left_paren, while, return, =, +, -, *, /, %. 
+
 
 extern void error(char *m);
 extern void init();
