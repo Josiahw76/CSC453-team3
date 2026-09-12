@@ -1,0 +1,10 @@
+{
+	n = arg[0];
+	fac = 1;
+	while ( n )
+	{
+		fac = fac * n;
+		n = n - 1;
+	}
+	return fac;
+}
