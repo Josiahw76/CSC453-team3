@@ -390,7 +390,16 @@ factor() {
 	case ARG:
 	    match(ARG);
 
-	    // to be completed
+	    match('[');
+	    match(INT8);
+	    if (!match(']') {
+		error("Missing close bracket");
+	    }
+	    // This is ripped directly from the translation scheme
+	    emit(aload_1);
+	    emit2(bipush, tokenval);
+	    stackDepth++;
+	    emit(1aload);
 
 	    break;
 

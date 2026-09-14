@@ -32,7 +32,8 @@
 // Josiah
 #define WHILE	ELSE+1
 #define RET	WHILE+1
-#define EQ	RET+1
+#define ARG	RET+1
+#define EQ	ARG+1
 #define PLUS	EQ+1
 #define MINUS	PLUS+1
 #define MULT	MINUS+1

@@ -8,6 +8,7 @@
 char lexbuf[BSIZE];
 int lineno = 1;
 int tokenval = NONE;
+int idval = 3;
 
 int lexan() {
     int t;
@@ -64,7 +65,8 @@ int lexan() {
 
 	    if (p == -1) { // does it exist in our table yet?
 		//printf("** calling insert\n");
-		p = insert(lexbuf, ID, 0);
+		p = insert(lexbuf, ID, idval);
+		idval++; // keep track of new user variables
 	    }
 
 	    tokenval = p;

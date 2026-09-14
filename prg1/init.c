@@ -13,6 +13,7 @@ struct entry keywords[] =
     // Josiah
     {"while", WHILE, -1},
     {"return", RET, -1},
+    {"arg", ARG, -1},
     {"=", EQ, -1},
     {"+", PLUS, -1},
     {"-", MINUS, -1},

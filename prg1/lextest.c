@@ -26,8 +26,16 @@ main(int argc, char* argv[])
 			printf("DONE");
 			printf(",%d> ", symtable[tokenval].var_index);
 			break;
-		    // to be completed
-		   
+		    case ID:
+			// WIP
+			printf("ID");
+			printf(",%d> ", symtable[tokenval].var_index);
+			break;
+		    case ARG:
+			printf("ARG");
+			printf(",%d> ", symtable[tokenval].var_index);
+
+			break;
 		    case INT8:
 			printf("INT8");
 			printf(",%d> ", tokenval);
