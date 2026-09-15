@@ -257,6 +257,8 @@ void
 opt_stmts() {
     // to be completed
     // grammar = stmt opt_stmts | nothing
+    stmt();
+    opt_stmts();
 }
 
 //*******************************************************************************
@@ -265,14 +267,18 @@ void
 expr() {
     // to be completed
     // grammar = term more_terms
+    term();
+    moreterms();
 }
 
 //*******************************************************************************
 
 void
 term() {
-    // to be completed
-    // grammar = factor more_factors
+    // Josiah: grammar = factor morefactors
+    // This should just work?
+    factor();
+    morefactors();
 }
 
 //*******************************************************************************
@@ -294,9 +300,17 @@ moreterms() {
 		break;
 	    
 	    case MINUS:
-		// to be completed
-		// This should be a mirror of the case PLUS code
-
+		// Josiah
+		// Essentially identical to the PLUS case, not much
+		// original work was done here
+		match(MINUS);
+		term();
+		if (stackDepth < 2) {
+		    error("Not enough operands for '-'");
+		}
+		emit(isub);
+		stackDepth--;
+		moreterms();
 		break;
 	    
 	    default:
@@ -381,7 +395,10 @@ factor() {
 		error("Variable does not exist");
 	    } else {
 		// to be completed
-		// Here, the value of the ID should be emitted
+		// Here, the tokenval of the ID should be emitted
+		// the issue is how to figure out what type of int
+		// Josiah:
+		
 	    }
 
 	    match(ID);
