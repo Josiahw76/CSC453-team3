@@ -14,10 +14,18 @@
 #define LEFT_CURLY       '{'
 #define RIGHT_CURLY       '}'
 
-// Josiah
+// Josiah - added definitions for operators and non-terminals
 #define LEFT_PAREN	'('
 #define RIGHT_PAREN	')'
-// I don't think the right paren is necessary, but the left is expected
+#define LEFT_BRACKET	'['
+#define RIGHT_BRACKET	']'
+#define EQ	'='
+#define PLUS	'+'
+#define MINUS	'-'
+#define MUL	'*'
+#define DIV	'/'
+#define MOD	'%'
+
 
 #define DONE	300
 #define ID	DONE+1
@@ -28,20 +36,9 @@
 
 #define IF	INT32+1
 #define ELSE	IF+1
-
-// Josiah
 #define WHILE	ELSE+1
 #define RET	WHILE+1
 #define ARG	RET+1
-#define EQ	ARG+1
-#define PLUS	EQ+1
-#define MINUS	PLUS+1
-#define MULT	MINUS+1
-#define DIV	MULT+1
-#define MOD	DIV+1
-
-
-// left_paren, while, return, =, +, -, *, /, %. 
 
 
 extern void error(char *m);

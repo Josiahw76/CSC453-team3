@@ -78,6 +78,7 @@ int lexan() {
 	    break;
 	} else {
 	    tokenval = NONE;
+
 	    rc = t;
 	    break;
 	}

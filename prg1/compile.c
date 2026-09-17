@@ -157,7 +157,7 @@ stmt() {
 	    if (var_index < 0) {
 		error("Attempting to use keyword as variable");
 	    } else if (var_index == 0) {
-		var_index = assign_var_index(tokenval); // initializeing variable
+		var_index = assign_var_index(tokenval); // initializeing variable		put the var name in the table ^
 	    }
 	    // else case already taken care of, just overwrite existing variable
 	    
@@ -168,7 +168,7 @@ stmt() {
 	    expr();
 
 	    if (stackDepth >= 1) {
-		emit2(istore, var_index);
+		emit2(istore, var_index); // put the expr val in the table
 		stackDepth--;
 	    } else {
 		error("No rvalue for assignment operator");
@@ -231,6 +231,7 @@ stmt() {
 	
 	case RET:
 	    match(RET);
+	    // printf("matched RET, matching expr"); // DEBUG
 	    expr();
 	    if (stackDepth >= 1) {
 		emit(istore_2);
@@ -242,6 +243,8 @@ stmt() {
 	    }
 
 	    // to be completed
+	    // we've already gotten expression, emitted the goto_ code.
+	    // what else needs done?
 
 	    break;
 	
@@ -258,7 +261,13 @@ opt_stmts() {
     // to be completed
     // grammar = stmt opt_stmts | nothing
     stmt();
-    opt_stmts();
+
+    // Match's last line assigns the value of lexan() to tk.
+    // If lexan finds EOF, it assigns DONE to tk.
+    // Therefore, continue until tk is DONE.
+    if (tk != DONE) {
+    	opt_stmts();
+    }
 }
 
 //*******************************************************************************
@@ -266,18 +275,16 @@ opt_stmts() {
 void
 expr() {
     // to be completed
-    // grammar = term more_terms
     term();
-    moreterms();
+    moreterms(); // This is not called anywhere else except moreterms
 }
 
 //*******************************************************************************
 
 void
 term() {
-    // Josiah: grammar = factor morefactors
     // This should just work?
-    factor();
+    factor(); 
     morefactors();
 }
 
@@ -285,7 +292,7 @@ term() {
 
 void
 moreterms() {
-
+	// printf("entered more_terms"); // DEBUG
     if (!(tk==';' || tk==')')) {
 	switch (tk) {
 	    case PLUS:
@@ -312,7 +319,7 @@ moreterms() {
 		stackDepth--;
 		moreterms();
 		break;
-	    
+
 	    default:
 		error("Expected '+' or '-'");
 	}
@@ -394,29 +401,29 @@ factor() {
 	    } else if (var_index == 0) {
 		error("Variable does not exist");
 	    } else {
-		// to be completed
-		// Here, the tokenval of the ID should be emitted
-		// the issue is how to figure out what type of int
-		// Josiah:
-		
+		// Josiah - aload followed by index indicates that the value
+		// is to be loaded from the localvar table at that location
+		emit2(aload, var_index);
+		stackDepth++;
 	    }
 
 	    match(ID);
 	    break;
 	
 	case ARG:
+	    // Josiah
 	    match(ARG);
 
 	    match('[');
 	    match(INT8);
-	    if (!match(']') {
+	    if (!match(']')) {
 		error("Missing close bracket");
 	    }
-	    // This is ripped directly from the translation scheme
+
 	    emit(aload_1);
 	    emit2(bipush, tokenval);
 	    stackDepth++;
-	    emit(1aload);
+	    emit(iaload);
 
 	    break;
 
