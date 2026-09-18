@@ -450,13 +450,16 @@ factor() {
 	    match(ARG);
 
 	    match('[');
+	    emit(aload_1);
+	    emit2(bipush, tokenval); // Problematic bipush here
+				     // amitting -1 consistently
+
 	    match(INT8);
+
 	    if (!match(']')) {
 		error("Missing close bracket");
 	    }
 
-	    emit(aload_1);
-	    emit2(bipush, tokenval);
 	    stackDepth++;
 	    emit(iaload);
 
