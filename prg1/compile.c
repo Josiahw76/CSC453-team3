@@ -147,9 +147,10 @@ stmt() {
 		
 	case LEFT_CURLY:
 
-	    match(LEFT_CURLY); // if tk see's the left curly bracket we know to use this case and advance the lexer
-	    opt_stmts();		// this should recursivly parse through zero or more statements and everything in the braces
-
+	    match(LEFT_CURLY); // if tk see's the left curly bracket we know 
+						   // to use this case and advance the lexer
+	    opt_stmts();		// this should recursivly parse through zero or 
+							// more statements and everything in the braces
 	    if (!match(RIGHT_CURLY)) { // Tries to consume last brace and will return error if not there
 
 		error("Expected closing curly brace");
@@ -300,6 +301,7 @@ opt_stmts() {
     // Match's last line assigns the value of lexan() to tk.
     // If lexan finds EOF, it assigns DONE to tk.
     // Therefore, continue until tk is DONE.
+
     if (tk != DONE) {
     	opt_stmts();
     }
@@ -327,7 +329,6 @@ term() {
 
 void
 moreterms() {
-	// printf("entered more_terms"); // DEBUG
     if (!(tk==';' || tk==')')) {
 	switch (tk) {
 	    case PLUS:
@@ -368,14 +369,44 @@ morefactors() {
     if (!(tk=='+' || tk=='-' || tk==';' || tk==')')) {
 	switch (tk) {
 	    case MUL:
-		// to be completed
-		// Perform mult. using the steps from prior defined operations
 
+		match(MUL);
+		factor();
+
+		if (stackDepth < 2) {
+			error("Not enough operands '-'");
+		}
+		emit(imul);
+		stackDepth--;
+		morefactors();
+		break;
+
+		// Josiah
+		case DIV:
+
+		match(DIV);
+		factor();
+
+		if (stackDepth < 2) {
+			error("Not enough operands '-'");
+		}
+		emit(idiv);
+		stackDepth--;
 		morefactors();
 		break;
 	    
-	    // to be completed
-	    // Division and Modulo operators go here, two extra cases
+		case MOD:
+
+		match(MOD);
+		factor();
+
+		if (stackDepth < 2) {
+			error("Not enough operands '-'");
+		}
+		emit(irem);
+		stackDepth--;
+		morefactors();
+		break;
 	    
 	    default:
 		error("Expected '*', '/' or '%'");
@@ -451,8 +482,7 @@ factor() {
 
 	    match('[');
 	    emit(aload_1);
-	    emit2(bipush, tokenval); // Problematic bipush here
-				     // amitting -1 consistently
+	    emit2(bipush, tokenval); // Push the value while it's in frame
 
 	    match(INT8);
 
