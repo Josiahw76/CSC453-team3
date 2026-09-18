@@ -138,113 +138,148 @@ match(int token) {
 
 void
 stmt() {
-    int var_index;
-    int loc = -1;
-    int if_loc = -1;
-    int else_loc = -1;
+    int var_index; // This records the identifiers symbol table
+    int loc = -1; //backpatch target for WHILE's exit loop
+    int if_loc = -1; //backpatch target for IF's condition loop
+    int else_loc = -1; //backpatch target for IF's skip-else jump
 
-    switch (tk) {
+    switch (tk) {  // Set look ahead token tk that is set in main
+		
 	case LEFT_CURLY:
-	    match(LEFT_CURLY);
-	    opt_stmts();
-	    if (!match(RIGHT_CURLY)) {
+
+	    match(LEFT_CURLY); // if tk see's the left curly bracket we know to use this case and advance the lexer
+	    opt_stmts();		// this should recursivly parse through zero or more statements and everything in the braces
+
+	    if (!match(RIGHT_CURLY)) { // Tries to consume last brace and will return error if not there
+
 		error("Expected closing curly brace");
+
 	    }
+
 	    break;
 	
 	case ID:
-	    var_index = symtable[tokenval].var_index;
-	    if (var_index < 0) {
+
+	    var_index = symtable[tokenval].var_index; // Look up the identifiers frame-slot number before calling match
+
+	    if (var_index < 0) { // checks if what we typed is a reserved word and not a real variable
+
 		error("Attempting to use keyword as variable");
+
 	    } else if (var_index == 0) {
-		var_index = assign_var_index(tokenval); // initializeing variable		put the var name in the table ^
+
+		var_index = assign_var_index(tokenval); // initializes and  
+
 	    }
 	    // else case already taken care of, just overwrite existing variable
 	    
-	    match(ID);
-	    if (!match(EQ)) {
+	    match(ID); // takes in identifier and advancing tk
+
+
+	    if (!match(EQ)) { // If the next token isnt a = it is invalid
 		error("Expected assignment operator");
 	    }
-	    expr();
+
+	    expr(); // parse and emit bycode for the right hand side 
 
 	    if (stackDepth >= 1) {
-		emit2(istore, var_index); // put the expr val in the table
+
+		emit2(istore, var_index); // pop the value from expr() off the stack and store it into the variables frameslot
 		stackDepth--;
-	    } else {
+
+	    } else {	// If expr() somehow produced nothing
+
 		error("No rvalue for assignment operator");
 	    }
-	    if (!match(';')) {
+
+	    if (!match(';')) { // requires the terminating sysmbol ;
 		error("Expected ';'");
 	    }
+
 	    break;
 	
 	case IF:
 	    match(IF);
-	    if (!match('(')) {
-		error("Mising parenthesis");
-	    }
-	    expr();
-	    if (!match(')')) {
+
+	    if (!match('(')) { // check for the opening bracket
 		error("Mising parenthesis");
 	    }
 
-	    emit(iconst_0);
-	    if_loc = pc;
-	    emit3(if_icmpeq, 0);
+	    expr(); // parse and emit the condition
+
+	    if (!match(')')) { // check ending bracket
+		error("Mising parenthesis");
+	    }
+
+	    emit(iconst_0); // push 0 so the condition can compare something
+
+	    if_loc = pc; // record the address where the next instruction is going to be emmited at for backpatch
+	    emit3(if_icmpeq, 0); // pop the condition value and the 0 and compare them if equal branch
+		
+	    stmt();
+
+		else_loc = pc; // record the address for where the next instruction is be jumped to 
+	    emit3(goto_, 0); // this alows the then branch skip over the else branch once its done executing
+
+	    backpatch(if_loc, pc - if_loc); // since we have started the else branch we can now go back and replace 0 with pc - if_loc
+
+	    if (!match(ELSE)) { // checks to make sure the next word is else
+		error("Expected 'else'");
+	    }
 
 	    stmt();
 
-	    // to be completed
-	    // translation scheme says:
-	    // {backpatch(loc, pc−loc); } else {... goto next statement ...}
-
-	    stmt();
-
-	    // to be completed
-	    // WHILE block has emit3(goto_, test_loc - pc); backpatch(); here
+	    backpatch(else_loc, pc - else_loc); //go back and replace 0 with pc - if_loc
 
 	    break;
 	
 	case WHILE:
+
 	    match(WHILE);
-	    if (!match('(')) {
+
+	    if (!match('(')) { // require and check the first charactor is opening bracket
 		error("Mising parenthesis");
 	    }
 
-	    int test_loc = pc; // Save the current line which is post 
-			       // opening paren
-	    expr();
+	    int test_loc = pc; // record the starting address
 
-	    if (!match(')')) {
+	    expr(); // parse and emit
+
+	    if (!match(')')) { // check ending bracket
 		error("Mising parenthesis");
 	    }
 
-	    emit(iconst_0);
-	    loc = pc;
-	    emit3(if_icmpeq, 0); // test equality
+	    emit(iconst_0); // push 0 again so there is something to be compared
+	    loc = pc; // store the address the next instruction is going to be emited at for backpatch later
+	    emit3(if_icmpeq, 0); //pop the condition value and the 0 compare the values and if equal branch
 
-	    stmt();
+	    stmt();// parse and emit the loops body code
 
-	    emit3(goto_, test_loc-pc);
-	    backpatch(loc, pc-loc);
+	    emit3(goto_, test_loc-pc); //jump back to the top of the loop
+	    backpatch(loc, pc-loc); // now that pc is passed goto_ fix if_icmpeq by replaceing 0 with pc -loc
+
 	    break;
 	
 	case RET:
+
 	    match(RET);
-	    // printf("matched RET, matching expr"); // DEBUG
-	    expr();
-	    if (stackDepth >= 1) {
-		emit(istore_2);
-		retLoc[numRets] = pc;
-		emit3(goto_, retLoc[numRets]);
-		numRets++;
-	    } else {
+
+	    expr(); //parse and emit the returns value code
+
+	    if (stackDepth >= 1) { //make sure expr() gave something back
+
+		emit(istore_2);// pop the value off the stack and store it in local variable slot 2
+		retLoc[numRets] = pc; // record the address the next instruction is going to be emitted at
+		emit3(goto_, retLoc[numRets]); // 
+		numRets++; //increment to the next free spot so the next return statement gets its own entry
+
+	    } else { //if the expr() left nothing on the stack 
 		error("No value to return, stack empty");
 	    }
 
-	    // to be completed
-	    // we've already gotten expression, emitted the goto_ code.
-	    // what else needs done?
+		 if (!match(';')) {     // require terminating statement ;     
+       	 error("Expected ';'");
+   		 }     
 
 	    break;
 	
