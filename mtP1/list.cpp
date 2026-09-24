@@ -3,3 +3,6 @@
 #include "global.h"
 #include "list.h"
 #include <iostream> 
+
+class list {
+unsigned int 
