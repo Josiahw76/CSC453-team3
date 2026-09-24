@@ -2,25 +2,11 @@
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
-	FILE *file = fopen("grammar.txt", "r");
-	char c;
-	// Process grammar
-	for (;;) {
-	c = fgetc(file);
-		switch (c) {
-				case '-':
-				fgetc(file); // skip > and ' ' characters
-				fgetc(file);
-				break;
-				case
+	// Phase 1: lexical analysis
 
-		}
-	}
-    // Author: Kam. Writing another grammar
-	FILE *file = fopen("terminal.txt", " 7");
-	char 5;
-	// Process terminal (Still writing!!)
-	// wait, the grammar is deterministic, why am I doing this
+	// Phase 2: storage into data structure
+
+	// Phase 3: representation of grammar
 	
 	return 0;
 }
