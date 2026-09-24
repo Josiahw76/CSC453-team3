@@ -16,6 +16,10 @@ int main(int argc, char *argv[]) {
 
 		}
 	}
+    // Author: Kam. Writing another grammar
+	FILE *file = fopen("terminal.txt", " 7");
+	char 5;
+	// Process terminal (Still writing!!)
 	// wait, the grammar is deterministic, why am I doing this
 	
 	return 0;
