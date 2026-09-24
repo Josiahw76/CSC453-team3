@@ -3,12 +3,26 @@
 
 #define EPSILON '&'
 
+
+class grammar {
+	public:	
+		production *P; // array of productions
+		symList *T; // terminals
+		symList *A; // non-terminals
+		symbol S; // Start symbol. This will be included in P
+		
+		inline void printIt() {
+
+		}
+};
+
+
 struct symbol {
     bool isTerm; // tells us how to treat the symbol. false means it must
 		     // derive to something.
 		     // all symbols with a isTerm of false can be found
 		     // in productions
-    char *name;  // alternatively could just be char, but can't
+    char name;  // alternatively could just be char, but can't
 		     // guarantee grammar will be individual characters
 };
 

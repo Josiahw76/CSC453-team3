@@ -18,7 +18,7 @@ void symList::expand() {
 }
 
 void symList::add(symbol sym) {
-    if (listCount >= listCapacity) {
+    if (listCount == listCapacity) {
 		expand();	
 	}
 	symbols[listCount] = sym;
