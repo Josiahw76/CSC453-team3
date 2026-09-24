@@ -14,7 +14,7 @@ struct symbol {
 
 struct production {
     symbol non_t; // left hand side
-    symbol *derivation; // Collection of symbols on rhs
+    symList *derivation; // Collection of symbols on rhs
 };
 
 #endif

@@ -6,9 +6,9 @@
 
 struct grammar {
 	production *P; // array of productions
-	symList T; // terminals
-	symList A; // non-terminals
-	symbol S; // Start symbol. This will be included in P
+	symList *T; // terminals
+	symList *A; // non-terminals
+	symbol *S; // Start symbol. This will be included in P
 };
 
 
