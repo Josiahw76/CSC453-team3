@@ -25,6 +25,21 @@ void symList::add(symbol sym) {
 	listCount++;
 }
 
+bool symList::inList(symbol sym) {
+	bool rc = false;
+
+	for (unsigned int i = 0; i < listCount; i++) {
+		if (sym.name)
+
+	return rc
+}
+
+void symList::addNew(symbol sym) {
+	if (!inList(sym)) {
+		add(sym);
+	}
+}
+
 void symList::cut() {
 	if (listCount < listCapacity) {
 		symbol *newl = new symbol[listCount];

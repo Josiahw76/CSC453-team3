@@ -14,7 +14,19 @@ class grammar {
 		inline void printIt() {
 
 		}
+		inline grammar() {
+			
+		}
+		inline void expand_productions() {
+			
+		}
 };
+
+inline char lexan(FILE *file) {
+	char c;
+	do { c = fgetc(file) } while (c == ' '); // skip blanks
+	return c;
+}
 
 
 struct symbol {
