@@ -52,6 +52,11 @@ int main(int argc, char *argv[]) {
 
 		}	
 	}
+// Kam
+	FILE *file = fopen("grammar.txt");
+	char c;
+	bool follow = true;
+	grammar
 
 	// S -> aBa | bCb ;
 	// ^
