@@ -114,8 +114,6 @@ int main(int argc, char *argv[]) {
 		gram->addProduction(p);
 
 		}	
-
-	
 	
 	return 0;
 }
