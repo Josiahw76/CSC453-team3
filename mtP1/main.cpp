@@ -59,19 +59,6 @@ int main(int argc, char *argv[]) {
 	terminal *term = new terminal();
 	symbol token;
 
-	int main()
-{
-	std::symbol;
-	symbol = c;
-	c = 65-90;
-
-	std::token;
-	token = c;
-	c = 97-122;
-
-}
-	
-
 		
 		
 
