@@ -1,5 +1,9 @@
+#include "grammar.h"
 #include "global.h"
 #include "symList.h"
+#include <stdio.h>
+
+// Author: Josiah W
 
 symList::symList(unsigned int listCapacity) {
     this->listCapacity = listCapacity;
@@ -18,6 +22,12 @@ void symList::expand() {
 }
 
 void symList::add(symbol sym) {
+		    printf("attempting an add\n");
+
+	    printf("listcount = %d\n", listCount);
+	    printf("listCapacity = %d\n", listCapacity);
+	    fflush(stdout);
+		    
     if (listCount == listCapacity) {
 		expand();	
 	}
@@ -26,12 +36,25 @@ void symList::add(symbol sym) {
 }
 
 bool symList::inList(symbol sym) {
-	bool rc = false;
+	bool rc = listCount > 0;
 
-	for (unsigned int i = 0; i < listCount; i++) {
-		if (sym.name)
+	if (rc) {
+		for (unsigned int i = 0; i < listCount; i++) {
+			if (sym.name == symbols[i].name) {
+			    rc = true;
+			    break;
+			}
+		}
+	}
+	return rc;
+}
 
-	return rc
+bool symList::getSymbol(unsigned int index, symbol &sym) {
+	bool rc = index < listCount;
+	if (rc) {
+		sym = symbols[index];
+	}
+	return rc;
 }
 
 void symList::addNew(symbol sym) {
@@ -51,7 +74,7 @@ void symList::cut() {
 	}
 }
 
-symbol symList::getSymbol(char *target) {
+symbol symList::getSymbol(char target) {
 	symbol sym = {.isTerm = 0}; // default is null term
 
 	for (unsigned int i = 0; i < listCount; i++) {
@@ -61,4 +84,8 @@ symbol symList::getSymbol(char *target) {
 	}
 
 	return sym;
+}
+
+unsigned int symList::getCount() {
+	return listCount;
 }

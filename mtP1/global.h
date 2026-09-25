@@ -1,33 +1,7 @@
 #ifndef __GLOBAL_H
 #define __GLOBAL_H
 
-#define EPSILON '&'
-
-
-class grammar {
-	public:	
-		production *P; // array of productions
-		symList *T; // terminals
-		symList *A; // non-terminals
-		symbol S; // Start symbol. This will be included in P
-		
-		inline void printIt() {
-
-		}
-		inline grammar() {
-			
-		}
-		inline void expand_productions() {
-			
-		}
-};
-
-inline char lexan(FILE *file) {
-	char c;
-	do { c = fgetc(file) } while (c == ' '); // skip blanks
-	return c;
-}
-
+class symList; // forward declaration for production
 
 struct symbol {
     bool isTerm; // tells us how to treat the symbol. false means it must
@@ -40,7 +14,8 @@ struct symbol {
 
 struct production {
     symbol non_t; // left hand side
-    symList *derivation; // Collection of symbols on rhs
+    symList **derivations; // Collection of all derivations for the non_t
+    unsigned int d_count; // Helps to index current derivation or new one
 };
 
 #endif
