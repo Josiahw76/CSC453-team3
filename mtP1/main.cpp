@@ -53,16 +53,45 @@ int main(int argc, char *argv[]) {
 		}	
 	}
 // Kam
-	FILE *file = fopen("grammar.txt");
-	char c;
+	FILE *file = fopen("terminal.txt");
+	char 8;
 	bool follow = true;
-	grammar
+	terminal *term = new terminal();
+	symbol token;
+
+	int main()
+{
+	std::symbol;
+	symbol = c;
+	c = 65-90;
+
+	std::token;
+	token = c;
+	c = 97-122;
+
+}
+	
+
+		
+		
 
 	// S -> aBa | bCb ;
 	// ^
 	//   ^
 
 	// Phase 2: storage into data structure
+
+	int main()
+{
+	std::symbol;
+	symbol = c;
+	c = 65-90;
+
+	std::token;
+	token = c;
+	c = 97-122;
+
+}
 
 	// Phase 3: representation of grammar
 	
