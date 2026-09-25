@@ -2,6 +2,8 @@
 # Fall 2026 Dr. Wheat
 #
 # Template written by Josiah W
+#
+# to run: write "make first"
 
 CWFLAGS = -Wextra -Wall
 
@@ -16,10 +18,10 @@ symList.o:	grammar.h symList.h symList.cpp
 main.o:		grammar.h symList.h main.cpp
 	g++ $(CWFLAGS) -O2 -c main.cpp -o main.o
 
-firstTest:	grammar.o main.o symList.o
-	g++ $(CWFLAGS) -O2 grammar.o main.o symList.o -o firstTest
+first:		grammar.o main.o symList.o
+	g++ $(CWFLAGS) -O2 grammar.o main.o symList.o -o first
 
 clean:	
-	rm -f *.o firstTest firstTest.exe
+	rm -f *.o first first.exe
 
 
