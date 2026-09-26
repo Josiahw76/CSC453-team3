@@ -19,13 +19,20 @@ int main(int argc, char *argv[]) {
 		c = gram->lexan();
 		if (!(c <= 90 && c >= 65)) {
 			// Not what we expected
-			printf("Error: expected non-terminal");
+			if (c == EOF) // check if we are add the end of the file
+			{
+				printf(" \n End of grammer file \n");
+			}else{
+				printf("Error: expected non-terminal \n");
+			}
 			break;			
 		}
 
 		// update our symbol object
 		token.name = c;
 		token.isTerm = false;
+
+		printf("%c ->", c); // print non terminal 
 
 		// Now we figure out what to do with it
 
@@ -71,33 +78,33 @@ int main(int argc, char *argv[]) {
 		// If we've reached this point, we have a production
 		// ready to load into with an associated non-terminal
 
-		c = gram->lexan();
+		//c = gram->lexan();this caused it to read another line before the first was used elemeniating the first right hand symbol
 
 		p.derivations[p.d_count] = new symList(3);
 		
 		while (c != ';') {
-			c = gram->lexan();
+			c = gram->lexan(); 
 			
 			if (c == '|') {
+				//increment to open up new spot (previous seg fault here)
+				p.d_count++;
 				// add new derivation and inc d_count
 				p.derivations[p.d_count] = new symList(3);
-				p.d_count++;
-							
+				
+				printf(" | ");		
 			}
 			// is it lowercase? [97-122]
 			if (c >= 97 && c <= 122) {
 				// put it into the terminal list (chris pratt?)
 				token.isTerm = true;
 				token.name = c;
-				printf("doing addnew\n");
-				fflush(stdout);
+				
 				gram->T->addNew(token);
-				printf("did addnew\n");
+				
 
 				// Now we add it to the current production
 				p.derivations[p.d_count]->add(token);
-				printf("added to derivations list");
-				fflush(stdout);
+				printf(" %c" , c);
 
 			} else if (c <= 90 && c >= 65) {
 				// put it in the non-terminal list
@@ -107,14 +114,17 @@ int main(int argc, char *argv[]) {
 
 				// add it to current production
 				p.derivations[p.d_count]->add(token);
+				printf(" %c" , c);
+
 
 			}
 		}
+		printf("\n");
 		// Add the current production to the production list
 		gram->addProduction(p);
 
-		}
-		gram->printIt();	
+		}	
+	gram->printIt();
 	
 	return 0;
 }
