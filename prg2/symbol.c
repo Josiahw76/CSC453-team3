@@ -64,6 +64,8 @@ int installID(char s[], int tk, int var_index) {
     return(rc);
 }
 
+// installNUM to be completed. Should mimic the above function like we discussed
+// in class
 int installNUM(char s[], int tk, int num_index) {
     return(1);
 }

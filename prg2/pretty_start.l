@@ -39,6 +39,9 @@ void write_directive();
 
 %}
 
+	// If you are gonna comment in here, put a tab first.
+	// That way compiler treats it as C code and not Lex code.
+
 %option	noyywrap
 %option	yylineno
 
@@ -46,26 +49,29 @@ quote	\'
 ditto	\"
 delim	
 ws	
-alpha
-digit
+alpha	[A-Za-z_]
+digit	[0-9]
 oct	
 exp	
-hex	
+hex	[0-9A-F]
 id	
-number	
+number	{digit}+(\.{digit}+)?(E[+\-]{digit}+)?
+	// Standard notation for number. One or more digits folllowed by
+	// an optional decimal and an optional exponent.
 
 %%
-
 
 {ws}				{ /* no action and no return */ }
 {quote}([^']|\\')*{quote}	write_char();
 {ditto}([^"]|\\\")*{ditto}	write_string();
+	// The char and string lines above are for literals
+	// All the left hand side somethings are regular expressions.
 something			write_oct();
-something			write_hex();
-something			write_int();
+{hex}+				write_hex();
+{digit}*			write_int();
 something	                write_fp();
-something	                write_id();
-left curly			write_begin();
+{alpha}({alpha}|digit)*	        write_id();
+left_curly			write_begin();
 something			write_end();
 left_paren			write_open();
 something			write_close();
