@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 
 	int c = 0;
 	bool first = true;
-	grammar *gram = new grammar("grammar.txt");
+	grammar *gram = new grammar(argv[argc - 1]);
 	symbol token;
 	production p;
 
@@ -21,7 +21,6 @@ int main(int argc, char *argv[]) {
 			// Not what we expected
 			if (c == EOF) // check if we are add the end of the file
 			{
-				printf(" \n End of grammer file \n");
 			}else{
 				printf("Error: expected non-terminal \n");
 			}
@@ -31,9 +30,7 @@ int main(int argc, char *argv[]) {
 		// update our symbol object
 		token.name = c;
 		token.isTerm = false;
-
-		printf("%c ->", c); // print non terminal 
-
+		
 		// Now we figure out what to do with it
 
 		if (first) {
@@ -44,7 +41,7 @@ int main(int argc, char *argv[]) {
 			p.derivations = new symList*[10];
 			p.d_count = 0;
 			p.non_t = token;
-			gram->A->add(token);	
+			gram->A->addNew(token);	
 
 		} else {
 			// check if there is already a production for our token
@@ -55,7 +52,7 @@ int main(int argc, char *argv[]) {
 				p.derivations = new symList*[10];
 				p.d_count = 0;
 				p.non_t = token;
-				gram->A->add(token);							
+				gram->A->addNew(token);							
 			} else {
 				// We want to load the existing production
 				// object into our variable p
@@ -91,7 +88,7 @@ int main(int argc, char *argv[]) {
 				// add new derivation and inc d_count
 				p.derivations[p.d_count] = new symList(3);
 				
-				printf(" | ");		
+
 			}
 			// is it lowercase? [97-122]
 			if (c >= 97 && c <= 122) {
@@ -101,10 +98,8 @@ int main(int argc, char *argv[]) {
 				
 				gram->T->addNew(token);
 				
-
 				// Now we add it to the current production
 				p.derivations[p.d_count]->add(token);
-				printf(" %c" , c);
 
 			} else if (c <= 90 && c >= 65) {
 				// put it in the non-terminal list
@@ -114,12 +109,10 @@ int main(int argc, char *argv[]) {
 
 				// add it to current production
 				p.derivations[p.d_count]->add(token);
-				printf(" %c" , c);
 
 
 			}
 		}
-		printf("\n");
 		// Add the current production to the production list
 		gram->addProduction(p);
 

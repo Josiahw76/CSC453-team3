@@ -23,23 +23,24 @@ void symList::expand() {
 
 void symList::add(symbol sym) {
 		  
-		    
+	// DEBUGGING
+	printf("adding %c, ", sym.name);
+	//
     if (listCount == listCapacity) {
 		expand();	
 	}
 	symbols[listCount] = sym;
 	listCount++;
+
+	printf("count is now %d\n", listCount);
 }
 
 bool symList::inList(symbol sym) {
-	bool rc = listCount > 0;
-
-	if (rc) {
-		for (unsigned int i = 0; i < listCount; i++) {
-			if (sym.name == symbols[i].name) {
-			    rc = true;
-			    break;
-			}
+	bool rc = false;
+	for (unsigned int i = 0; i < listCount; i++) {
+		if (sym.name == symbols[i].name) {
+		    rc = true;
+		    break;
 		}
 	}
 	return rc;
@@ -71,7 +72,7 @@ void symList::cut() {
 }
 
 symbol symList::getSymbol(char target) {
-	symbol sym = {.isTerm = 0}; // default is null term
+	symbol sym = {.isTerm = 0, .name = ' '}; // default is null term
 
 	for (unsigned int i = 0; i < listCount; i++) {
 		if (symbols[i].name == target) {

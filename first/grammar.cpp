@@ -78,20 +78,42 @@ void grammar::printIt() {
     // in order: start symbol, non-terminals, terminals, productions
 	// productions will imitate the grammar structure
 	symbol sym;
-	cout << "Start symbol: " << S.name << endl;
-	cout << "Non-terminals:" << endl;
+	cout << "Start symbol: \t" << S.name << endl;
+	cout << "Non-terminals:\t";
 	unsigned int count = A->getCount();
 	for (unsigned int i = 0; i < count; i++) {
 		if (A->getSymbol(i, sym)) {
-			cout << sym.name << endl;
+			cout << sym.name << ", ";
 		}
 	}
-	cout << "Terminals:\n";
+	cout << endl;
+	cout << "Terminals:\t";
 	count = T->getCount();
 	for (unsigned int i = 0; i < count; i++) {
 		if (T->getSymbol(i, sym)) {
-			cout << sym.name << endl;
+			cout << sym.name << ", ";
 		}
 	}
+	cout << "\n\n";
+	cout << "Productions:\n";
+	count = A->getCount();
+	unsigned int rhs_counter;
+	for (unsigned int i = 0; i < count; i++) {
+		// Iterate for non-terminals
+		cout << P[i].non_t.name << "  ->\t  ";
 
+		for (unsigned int j = 0; j <= P[i].d_count; j++) {
+			// Iterate for right hand sides
+			if (j > 0) {
+				// add in the vertical line for second and on
+				cout << "  \t| ";
+			}
+			rhs_counter = P[i].derivations[j]->getCount();
+			for (unsigned int k = 0; k < rhs_counter; k++) {
+				P[i].derivations[j]->getSymbol(k, sym);
+				cout << sym.name << " ";
+			}
+			cout << " ;\n";
+		}
+	}
 }
