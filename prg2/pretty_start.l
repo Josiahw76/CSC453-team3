@@ -51,11 +51,11 @@ delim
 ws	
 alpha	[A-Za-z_]
 digit	[0-9]
-oct	
-exp	
-hex	[0-9A-F]
-id	
-number	{digit}+(\.{digit}+)?(E[+\-]{digit}+)?
+oct	[0-7]
+exp	(e|E)(+|-)?{digit}+
+hex	[0-9a-fA-F]
+id	alpha({alpha}|{digit})*
+number	{digit}+(\.{digit}+)?{exp}?
 	// Standard notation for number. One or more digits folllowed by
 	// an optional decimal and an optional exponent.
 
@@ -66,25 +66,28 @@ number	{digit}+(\.{digit}+)?(E[+\-]{digit}+)?
 {ditto}([^"]|\\\")*{ditto}	write_string();
 	// The char and string lines above are for literals
 	// All the left hand side somethings are regular expressions.
-something			write_oct();
-{hex}+				write_hex();
-{digit}*			write_int();
-something	                write_fp();
+0{oct}+				write_oct();
+0(x|X){hex}+			write_hex();
+{digit}+			write_int();
+{digit}*\.{digit}+{exp}?	write_fp();
 {alpha}({alpha}|digit)*	        write_id();
-left_curly			write_begin();
-something			write_end();
-left_paren			write_open();
-something			write_close();
+"{"				write_begin();
+"}"				write_end();
+"("				write_open();
+")"				write_close();
 "["				write_bopen();
 "]"				write_bclose();
 ";"				write_sep();
 "+"				|
 "+="				|
+	// This should have all the relational operators.
+	// < > <= >= == 
+
 many more such lines            |
 "::"				write_op();
 inline comment			write_inline();
-/* */ style comment     	write_comment();
-#define type command    	write_directive();
+(\/\/[^\n]*)|(\/\*([^*]|\*+[^*/])*\*+\/)	write_comment();
+#[^\n]*			    	write_directive();
 .				printf("unrecognized input at line %d", yylineno);
 
 %%
@@ -104,6 +107,7 @@ void write_indent() {
 
 void write_html_char(int c) {
     switch (c) {
+// This needs to be filled out with all the operator cases
 	case '<':
 	    printf("&lt;");
 	    break;
@@ -111,10 +115,10 @@ void write_html_char(int c) {
 	    printf("&gt;");
 	    break;
 	case '"':
-	    something;
+	    printf("&quot;");
 	    break;
 	case '&':
-	    something;
+	    printf("&amp;");
 	    break;
 	case '\n':
 	    if (inComment) {
