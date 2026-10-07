@@ -13,9 +13,10 @@ int main(int argc, char *argv[]) {
 	bool first = true;
 	grammar *gram = new grammar(argv[argc - 1]);
 	symbol token;
-	production p;
+
 
 	while (c != EOF) {
+		production *p = NULL;
 		c = gram->lexan();
 		if (!(c <= 90 && c >= 65)) {
 			// Not what we expected
@@ -38,10 +39,9 @@ int main(int argc, char *argv[]) {
 			gram->setStart(token);
 			first = false; // now we never repeat this code.
 
-			p.derivations = new symList*[10];
-			p.d_count = 0;
-			p.non_t = token;
+			production newp = { .non_t = token, .derivations =  new symList*[10], .d_count = 1};
 			gram->A->addNew(token);	
+			p = &newp;
 
 		} else {
 			// check if there is already a production for our token
@@ -49,14 +49,15 @@ int main(int argc, char *argv[]) {
 				// There isn't, so we're making a new production
 				// all non-terminals must have at least one	
 				// production, so this is sufficient to check
-				p.derivations = new symList*[10];
-				p.d_count = 0;
-				p.non_t = token;
-				gram->A->addNew(token);							
+				production newp = { .non_t = token, .derivations =  new symList*[10], .d_count = 1};
+				gram->A->addNew(token);	
+				p = &newp;
+						
 			} else {
 				// We want to load the existing production
 				// object into our variable p
-				p = gram->getProduction(token);
+				p = &gram->getProduction(token);
+				p->d_count++;
 			}			
 
 		}
@@ -77,16 +78,16 @@ int main(int argc, char *argv[]) {
 
 		//c = gram->lexan();this caused it to read another line before the first was used elemeniating the first right hand symbol
 
-		p.derivations[p.d_count] = new symList(3);
+		p->derivations[p->d_count - 1] = new symList(3);
 		
 		while (c != ';') {
 			c = gram->lexan(); 
 			
 			if (c == '|') {
 				//increment to open up new spot (previous seg fault here)
-				p.d_count++;
+				p->d_count++;
 				// add new derivation and inc d_count
-				p.derivations[p.d_count] = new symList(3);
+				p->derivations[p->d_count - 1] = new symList(3);
 				
 
 			}
@@ -99,7 +100,7 @@ int main(int argc, char *argv[]) {
 				gram->T->addNew(token);
 				
 				// Now we add it to the current production
-				p.derivations[p.d_count]->add(token);
+				p->derivations[p->d_count - 1]->add(token);
 
 			} else if (c <= 90 && c >= 65) {
 				// put it in the non-terminal list
@@ -108,15 +109,17 @@ int main(int argc, char *argv[]) {
 				gram->A->addNew(token);
 
 				// add it to current production
-				p.derivations[p.d_count]->add(token);
+				p->derivations[p->d_count - 1]->add(token);
 
 
 			}
 		}
 		// Add the current production to the production list
-		gram->addProduction(p);
-
-		}	
+		// if it is new
+		if (!gram->productionExists(p->non_t)) {
+			gram->addProduction(p);
+		}
+	}	
 	gram->printIt();
 	
 	return 0;

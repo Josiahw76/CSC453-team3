@@ -21,14 +21,16 @@ class grammar {
 
 		void setStart(symbol S);
 
-		bool addProduction(production p); // done
+		bool addProduction(production *p); // done
 		unsigned int getProdCount(); // done
 		grammar(const char *filename); // done
 		void printIt();
 		bool productionExists(symbol sym); // done
 		int findProduction(symbol non_t);
-		production getProduction(symbol non_t);
+		production& getProduction(symbol non_t);
 	 	int lexan(); // done
+		
+		symList *first(symbol sym); // The meat and 'taters
 };
 
 #endif

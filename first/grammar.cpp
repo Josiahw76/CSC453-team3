@@ -37,16 +37,16 @@ bool grammar::productionExists(symbol sym) {
 	return rc;
 }
 
-production grammar::getProduction(symbol non_t) {
+production& grammar::getProduction(symbol non_t) {
 	return P[findProduction(non_t)];
 
 }
 
-bool grammar::addProduction(production p) {
+bool grammar::addProduction(production *p) {
 	bool rc = productionCount < 100;
 	// add to P[productionCount]
 	if (rc) {
-		P[productionCount] = p;
+		P[productionCount] = *p;
 		productionCount++;
 	} else {
 		printf("ahh its too feature rich\n");
@@ -101,8 +101,9 @@ void grammar::printIt() {
 	for (unsigned int i = 0; i < count; i++) {
 		// Iterate for non-terminals
 		cout << P[i].non_t.name << "  ->\t  ";
+		
 
-		for (unsigned int j = 0; j <= P[i].d_count; j++) {
+		for (unsigned int j = 0; j < P[i].d_count; j++) {
 			// Iterate for right hand sides
 			if (j > 0) {
 				// add in the vertical line for second and on
@@ -111,9 +112,20 @@ void grammar::printIt() {
 			rhs_counter = P[i].derivations[j]->getCount();
 			for (unsigned int k = 0; k < rhs_counter; k++) {
 				P[i].derivations[j]->getSymbol(k, sym);
-				cout << sym.name << " ";
+				cout << sym.name;
 			}
-			cout << " ;\n";
+			cout << ";\n";
 		}
 	}
+}
+
+/******************************************************************************/
+
+// Author: Josiah
+
+symList *grammar::first(symbol sym) {
+	symList *inFirst = new symList(10);
+	
+
+	return inFirst;
 }
