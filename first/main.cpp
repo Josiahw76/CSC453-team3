@@ -5,13 +5,17 @@
 
 // Author: Josiah W
 // Contributions by Tyler H
+//
+//
+// Provide the desired non-terminal as an argument when executing the program.
+// E.g.  $> ./first grammar.txt S
 
 int main(int argc, char *argv[]) {
 	// Phase 1: lexical analysis
 
 	int c = 0;
 	bool first = true;
-	grammar *gram = new grammar(argv[argc - 1]);
+	grammar *gram = new grammar(argv[1]);
 	symbol token;
 
 
@@ -129,7 +133,7 @@ int main(int argc, char *argv[]) {
 	gram->printIt();
 
 	// Now for the real test...
-	symbol testSym = {.isTerm = false, .name = 'S'};
+	symbol testSym = {.isTerm = false, .name = argv[argc-1][0]};
 	symList *firstOf = gram->first(testSym);
 	printf("\nFirst of %c", testSym.name);
 	firstOf->dumpList();
