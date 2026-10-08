@@ -121,6 +121,11 @@ int main(int argc, char *argv[]) {
 		}
 	}	
 	gram->printIt();
-	
+
+	// Now for the real test...
+	symList *firstOfS = gram->first(gram->getStart());
+	printf("\nFirst of S");
+	firstOfS->dumpList();
+
 	return 0;
 }

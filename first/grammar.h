@@ -20,6 +20,7 @@ class grammar {
 		symList *A; // non-terminals
 
 		void setStart(symbol S);
+		symbol getStart() const;
 
 		bool addProduction(production *p); // done
 		unsigned int getProdCount(); // done

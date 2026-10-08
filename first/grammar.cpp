@@ -74,6 +74,10 @@ void grammar::setStart(symbol S) {
 	this->S = S;
 }
 
+symbol grammar::getStart() const{
+	return S;
+}
+
 void grammar::printIt() {
     // in order: start symbol, non-terminals, terminals, productions
 	// productions will imitate the grammar structure
@@ -100,6 +104,7 @@ void grammar::printIt() {
 	unsigned int rhs_counter;
 	for (unsigned int i = 0; i < count; i++) {
 		// Iterate for non-terminals
+		// cout << "d_count = " << P[i].d_count << endl;
 		cout << P[i].non_t.name << "  ->\t  ";
 		
 
@@ -123,9 +128,60 @@ void grammar::printIt() {
 
 // Author: Josiah
 
-symList *grammar::first(symbol sym) {
-	symList *inFirst = new symList(10);
-	
+// This is where epsilon will need to be represented as &.
+// Discovering a non-terminal in a production will result in recursive
+// First calls until the list is fully resolved.
+//
+// To start, we iterate through our productions.
 
+//***********************************
+// We need a cat function for symList <- done
+// **********************************
+
+symList *grammar::first(symbol sym) {
+
+	unsigned int rhs_count, rhs_length;
+	symbol tempSym;	
+	symList *tempList;
+	symList *inFirst = new symList(10);
+
+	// Copy the production out of the list for easier access.
+	// Note that this is an object and not a pointer
+	production firstOf = P[findProduction(sym)];
+
+	
+	if (((sym.name == '&') || A->inList(sym))) {
+		// First things first, iterate across our productions.
+		rhs_count = P[findProduction(sym)].d_count;
+		// Nested for loops are necessary as derivations
+		// come in the form of a 2d array
+		for (unsigned int i = 0; i < rhs_count; i++) {
+			rhs_length = firstOf.derivations[i]->getCount();
+
+			for (unsigned int j = 0; j < rhs_length; j++) {
+				firstOf.derivations[i]->getSymbol(j, tempSym);
+				if (tempSym.isTerm) {
+					inFirst->add(tempSym);
+					break;
+				} else if (tempSym.name == '&') {
+					inFirst->add(tempSym);
+
+				} else { // Else it is a non-terminal
+					// Add everything in first of
+					// the symbol to our first.
+					tempList = first(tempSym);
+					inFirst->cat(tempList);
+					delete tempList;
+				}
+			}
+		}
+	} else {
+		// If the symbol itself is a terminal or epsilon, return
+		// it by itself
+		inFirst->add(sym);
+	}
+	// trim the list down. Why? I want to justify having written the code
+	// for cut()
+	inFirst->cut();
 	return inFirst;
 }
