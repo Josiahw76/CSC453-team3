@@ -100,7 +100,6 @@ unsigned int symList::getCapacity() const {
 }
 
 void symList::cat(symList *list2) {
-	// This should work just fine, hasn't really been tested.
 	unsigned int i, j, list2count;
 	symbol temp;
 	list2count = list2->getCount();	
@@ -109,12 +108,17 @@ void symList::cat(symList *list2) {
 	for (i = 0; i < listCount; i++) {
 		catted[i] = symbols[i]; 
 	}
-	for (j = 0; j < list2count; j++) {
-		list2->getSymbol(j, temp);
-		catted[i + j] = temp;
-	}
+	// This is about to get weird
+	// For us to use addNew on the array, it needs to be part of the class.
+	// So, swap out the arrays to finish the operation.
+	listCapacity = listCount + list2count;
 	delete [] symbols;
 	symbols = catted;
+
+	for (j = 0; j < list2count; j++) {
+		list2->getSymbol(j, temp);
+		addNew(temp);
+	}
 }
 
 void symList::dumpList() const {

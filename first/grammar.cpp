@@ -119,7 +119,7 @@ void grammar::printIt() {
 				P[i].derivations[j]->getSymbol(k, sym);
 				cout << sym.name;
 			}
-			cout << ";\n";
+			cout << " ;\n";
 		}
 	}
 }
@@ -150,7 +150,9 @@ symList *grammar::first(symbol sym) {
 	production firstOf = P[findProduction(sym)];
 
 	
-	if (((sym.name == '&') || A->inList(sym))) {
+	if (!((sym.name == '&') || T->inList(sym))) {
+		// If sym itself is a terminal or epsilon, go to else block.
+
 		// First things first, iterate across our productions.
 		rhs_count = P[findProduction(sym)].d_count;
 		// Nested for loops are necessary as derivations
@@ -161,10 +163,10 @@ symList *grammar::first(symbol sym) {
 			for (unsigned int j = 0; j < rhs_length; j++) {
 				firstOf.derivations[i]->getSymbol(j, tempSym);
 				if (tempSym.isTerm) {
-					inFirst->add(tempSym);
+					inFirst->addNew(tempSym);
 					break;
 				} else if (tempSym.name == '&') {
-					inFirst->add(tempSym);
+					inFirst->addNew(tempSym);
 
 				} else { // Else it is a non-terminal
 					// Add everything in first of

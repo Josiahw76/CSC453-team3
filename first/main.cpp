@@ -112,6 +112,12 @@ int main(int argc, char *argv[]) {
 				p->derivations[p->d_count - 1]->add(token);
 
 
+			} else if (c == '&') {
+				token.isTerm = true;
+				token.name = c;
+				gram->T->addNew(token);
+
+				p->derivations[p->d_count - 1]->add(token);
 			}
 		}
 		// Add the current production to the production list
@@ -123,9 +129,10 @@ int main(int argc, char *argv[]) {
 	gram->printIt();
 
 	// Now for the real test...
-	symList *firstOfS = gram->first(gram->getStart());
-	printf("\nFirst of S");
-	firstOfS->dumpList();
+	symbol testSym = {.isTerm = false, .name = 'S'};
+	symList *firstOf = gram->first(testSym);
+	printf("\nFirst of %c", testSym.name);
+	firstOf->dumpList();
 
 	return 0;
 }

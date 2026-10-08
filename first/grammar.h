@@ -31,7 +31,7 @@ class grammar {
 		production& getProduction(symbol non_t);
 	 	int lexan(); // done
 		
-		symList *first(symbol sym); // The meat and 'taters
+		symList *first(symbol sym); // The meat and taters
 };
 
 #endif
