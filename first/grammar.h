@@ -15,6 +15,9 @@ class grammar {
 		unsigned int productionCount;
 		FILE *file;
 
+		firstSet first(symbol sym); // The meat and taters
+		
+
 	public:	
 		symList *T; // terminals
 		symList *A; // non-terminals
@@ -30,8 +33,9 @@ class grammar {
 		int findProduction(symbol non_t);
 		production& getProduction(symbol non_t);
 	 	int lexan(); // done
-		
-		symList *first(symbol sym); // The meat and taters
+
+		firstSet *first(); // Helper function: gets first of all terminal 
+			      // and non-terminal symbols in the grammar.
 };
 
 #endif

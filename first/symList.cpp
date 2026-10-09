@@ -15,7 +15,7 @@ symList::symList(unsigned int listCapacity) {
 }
 
 void symList::expand() {
-    symbol *newl = new symbol[listCapacity + 1];
+    symbol *newl = new symbol[++listCapacity];
     for (unsigned int i = 0; i < listCount; i++) {
 	    newl[i] = symbols[i];
 
@@ -55,16 +55,16 @@ symbol symList::getSymbol(char target) const {
 
 	return sym;
 }
-/*
+
 symbol symList::getSymbol(unsigned int index) const {
 	symbol sym = {.isTerm = 0, .name = ' '}; // default is null term
 
-	if (index > 0 && index < listCount) {
+	if (index >= 0 && index < listCount) {
 		sym = symbols[index];
 	}
 	return sym;
 }
-*/
+
 void symList::add(symbol sym) {
     if (listCount == listCapacity) {
 		expand();	

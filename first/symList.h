@@ -19,7 +19,7 @@ class symList {
 		symList(unsigned int listCapacity);
 		bool getSymbol(unsigned int index, symbol &sym) const;		
 		symbol getSymbol(char target) const;
-		// symbol getSymbol(unsigned int index) const;
+		symbol getSymbol(unsigned int index) const;
 		void add(symbol sym);
 		void addNew(symbol sym);
 		void cut();	
@@ -28,6 +28,7 @@ class symList {
 		void cat(symList *list2);
 
 		void dumpList() const;
+
 
 };
 

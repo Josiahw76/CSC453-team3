@@ -138,20 +138,21 @@ void grammar::printIt() {
 // We need a cat function for symList <- done
 // **********************************
 
-symList *grammar::first(symbol sym) {
+firstSet grammar::first(symbol sym) {
 
 	unsigned int rhs_count, rhs_length;
 	symbol tempSym;	
-	symList *tempList;
+	firstSet tempList;
 	symList *inFirst = new symList(10);
 
 	// Copy the production out of the list for easier access.
 	// Note that this is an object and not a pointer
-	production firstOf = P[findProduction(sym)];
 
-	
 	if (!((sym.name == '&') || T->inList(sym))) {
 		// If sym itself is a terminal or epsilon, go to else block.
+
+		production firstOf = P[findProduction(sym)];
+
 
 		// First things first, iterate across our productions.
 		rhs_count = P[findProduction(sym)].d_count;
@@ -162,18 +163,19 @@ symList *grammar::first(symbol sym) {
 
 			for (unsigned int j = 0; j < rhs_length; j++) {
 				firstOf.derivations[i]->getSymbol(j, tempSym);
-				if (tempSym.isTerm) {
-					inFirst->addNew(tempSym);
-					break;
-				} else if (tempSym.name == '&') {
+
+			 	if (tempSym.name == '&') {
 					inFirst->addNew(tempSym);
 
+				} else if (tempSym.isTerm) {
+					inFirst->addNew(tempSym);
+					break;
 				} else { // Else it is a non-terminal
 					// Add everything in first of
 					// the symbol to our first.
 					tempList = first(tempSym);
-					inFirst->cat(tempList);
-					delete tempList;
+					inFirst->cat(tempList.set);
+					delete tempList.set;
 				}
 			}
 		}
@@ -182,8 +184,44 @@ symList *grammar::first(symbol sym) {
 		// it by itself
 		inFirst->add(sym);
 	}
-	// trim the list down. Why? I want to justify having written the code
-	// for cut()
-	inFirst->cut();
-	return inFirst;
+	firstSet rc = {.alpha = sym, .set = inFirst};
+
+	return rc;
+}
+
+// *****************************************************************************
+
+firstSet *grammar::first() {
+	unsigned int sym_count, Acount, Tcount, i, j, sCount;
+	Acount = A->getCount();
+	Tcount = T->getCount();
+	sym_count = Acount + Tcount;
+
+	firstSet *sets = new firstSet[sym_count];
+
+	// Non-terminals first
+	for (i = 0; i < Acount; i++) {
+		sets[i] = first(A->getSymbol(i));
+	}
+	for (j = 0; j < Tcount; j++) {
+		sets[i + j] = first(T->getSymbol(j));
+	}
+
+	// Print phase
+	symbol reader, sym;
+	for (i = 0; i < sym_count; i++) {
+		sym = sets[i].alpha;
+		sets[i].set->getSymbol(0, reader);	
+		cout << "First of " << sym.name << " = {" << reader.name;
+		sCount = sets[i].set->getCount();
+		for (j = 1; j < sCount; j++) {
+			sets[i].set->getSymbol(j, reader);
+			cout << ", " << reader.name;
+		}
+		cout << "}\n";
+	}
+	cout << "\n";
+
+
+	return sets;
 }

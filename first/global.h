@@ -18,4 +18,10 @@ struct production {
     unsigned int d_count; // Helps to index current derivation or new one
 };
 
+// Object to be filled in by First function
+struct firstSet {
+	symbol alpha;
+	symList *set;
+};
+
 #endif
