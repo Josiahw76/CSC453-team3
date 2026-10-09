@@ -1,5 +1,4 @@
 %{
-# TO BE NAMED p2.l
 
 #include <stdio.h>
 #include "pretty.h"
@@ -39,38 +38,31 @@ void write_directive();
 
 %}
 
-	// If you are gonna comment in here, put a tab first.
-	// That way compiler treats it as C code and not Lex code.
-
 %option	noyywrap
 %option	yylineno
 
 quote	\'
 ditto	\"
-delim	
-ws	
-alpha	[A-Za-z_]
-digit	[0-9]
-oct	[0-7]
-exp	(e|E)(+|-)?{digit}+
-hex	[0-9a-fA-F]
-id	alpha({alpha}|{digit})*
-number	{digit}+(\.{digit}+)?{exp}?
-	// Standard notation for number. One or more digits folllowed by
-	// an optional decimal and an optional exponent.
+delim	[]
+ws		[\n\t\f\v\r ]
+alpha		[A-Za-z_]
+digit		[0-9]
+oct		[0-7]
+exp		[eE][-+]?{digit}+
+hex		[0-9a-fA-F]
+id		{alpha}({alpha}|{digit})*
+number		{digit}+(\.{digit}+)?{exp}?
 
 %%
 
-{ws}				{ /* no action and no return */ }
+{ws}				{}
 {quote}([^']|\\')*{quote}	write_char();
 {ditto}([^"]|\\\")*{ditto}	write_string();
-	// The char and string lines above are for literals
-	// All the left hand side somethings are regular expressions.
 0{oct}+				write_oct();
 0(x|X){hex}+			write_hex();
 {digit}+			write_int();
 {digit}*\.{digit}+{exp}?	write_fp();
-{alpha}({alpha}|digit)*	        write_id();
+{id}				write_id();
 "{"				write_begin();
 "}"				write_end();
 "("				write_open();
@@ -78,16 +70,22 @@ number	{digit}+(\.{digit}+)?{exp}?
 "["				write_bopen();
 "]"				write_bclose();
 ";"				write_sep();
-"+"				|
-"+="				|
-	// This should have all the relational operators.
-	// < > <= >= == 
+"+"				write_op();
+"+="				write_op();
+"<"				write_op();
+">"				write_op();
+"<="				write_op();
+">="				write_op();
+"=="				write_op();
+"!="				write_op();
+"&&"				write_op();
+"||"				write_op();
+"*"				write_op();
 
-many more such lines            |
 "::"				write_op();
-inline comment			write_inline();
+"//"[^\n]*			write_inline();
 (\/\/[^\n]*)|(\/\*([^*]|\*+[^*/])*\*+\/)	write_comment();
-#[^\n]*			    	write_directive();
+#[^\n]*				write_directive();
 .				printf("unrecognized input at line %d", yylineno);
 
 %%
@@ -107,7 +105,6 @@ void write_indent() {
 
 void write_html_char(int c) {
     switch (c) {
-// This needs to be filled out with all the operator cases
 	case '<':
 	    printf("&lt;");
 	    break;
@@ -120,6 +117,15 @@ void write_html_char(int c) {
 	case '&':
 	    printf("&amp;");
 	    break;
+	case '+':
+		printf("&add;");
+		break;
+	case '-':
+		printf("&sub;");
+		break;
+	case '=':
+		printf("&eq;");
+		break;
 	case '\n':
 	    if (inComment) {
 		printf("\n%-*d", column, line++);
@@ -148,23 +154,58 @@ void write_char() {
 }
 
 void write_string() {
-    something;
+	// WIP
+	if (debug) {
+	fprintf(stderr, "write_string: %s\n", yytext);
+    }
+	printf("<font color='red'>");
+	write_html();
+	printf("</font> ");
+
 }
 
 void write_oct() {
-    something;
+	// WIP
+    if (debug) {
+	fprintf(stderr, "write_oct: %s\n", yytext);
+    }
+	printf("<i><font color='brown'>");
+    write_html();
+    printf("</i></font> ");
 }
 
 void write_hex() {
-    something;
+	// WIP
+    if (debug) {
+	fprintf(stderr, "write_hex: %s\n", yytext);
+    }
+	printf("<i><font color='brown'>");
+    write_html();
+    printf("</i></font> ");
+
 }
 
 void write_int() {
-    something;
+    if (debug) {
+	fprintf(stderr, "write_int: %s\n", yytext);
+    }
+
+    // WIP
+	printf("<font color='brown'>");
+	write_html();
+	printf("</font>");
 }
 
 void write_fp() {
-    something;
+    if (debug) {
+	fprintf(stderr, "write_fp: %s\n", yytext);
+    }
+
+    // WIP
+	printf("<font color='brown'>");
+	write_html();
+	printf("</font>");
+
 }
 
 void write_id() {
@@ -208,7 +249,12 @@ write_begin() {
 
 void
 write_end() {
-    something;
+	// WIP - Taken from pdf
+	// Note: column minus indent might have to go after write indent.
+	column -= INDENT;
+	write_indent();
+	write_html();
+	write_indent();
 }
 
 void
@@ -219,7 +265,9 @@ write_open() {
 
 void
 write_close() {
-    something;
+	// WIP - Taken from pdf
+    write_html();
+	paren--;
 }
 
 void
@@ -230,7 +278,8 @@ write_bopen() {
 
 void
 write_bclose() {
-    something;
+	write_html();
+	paren--;
 }
 
 void
@@ -260,7 +309,16 @@ write_op() {
 
 void
 write_inline() {
-    something;
+	// WIP
+    if (debug) {
+	fprintf(stderr, "write_inline: %s\n", yytext);
+    }
+    inComment = TRUE;
+    printf("<font color='green'>");
+    write_html();
+    printf("</font>");
+    inComment = FALSE;
+
 }
 
 void
@@ -278,5 +336,15 @@ write_comment() {
 
 void
 write_directive() {
-    something;
+	// WIP
+	// Magenta font with exit, boldface with exit, write html.
+    if (debug) {
+		fprintf(stderr, "write_directive: %s\n", yytext);
+    }
+	printf("<b><font color='magenta'>");
+	write_html();
+    printf("</b></font>");
+
+
+
 }

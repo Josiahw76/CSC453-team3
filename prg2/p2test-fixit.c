@@ -4,9 +4,11 @@
 
 // Include local header files
 
-#include "p2.h"
-#include "teddyBear.h"
-#include "sally.h"
+#include "error.c"
+#include "init.c"
+#include "pretty.h"
+#include "symbol.c"
+
 
 /******************************************************************************/
 

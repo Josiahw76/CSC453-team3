@@ -12,7 +12,7 @@ myInit() {
     installID("while", WHILE, -1);
     installID("do", DO, -1);
     installID("break", BREAK, -1);
-    installID("conintue", CONTINUE, -1);
+    installID("continue", CONTINUE, -1);
     installID("switch", SWITCH, -1);
     installID("case", CASE, -1);
     installID("default", DEFAULT, -1);
