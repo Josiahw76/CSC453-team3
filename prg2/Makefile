@@ -28,4 +28,4 @@ pretty:		pretty.o error.o init.o symbol.o pretty.h
 		$(CC) $(CFLAGS) -o pretty pretty.o error.o init.o symbol.o
 
 clean:	
-		rm -f *.o pretty.c pretty
+		rm -f *.o pretty.c pretty *.html

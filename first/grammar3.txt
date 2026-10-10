@@ -1,0 +1,3 @@
+S -> aB | &C | bC ;
+B -> da ;
+C -> efg | fge | & ;

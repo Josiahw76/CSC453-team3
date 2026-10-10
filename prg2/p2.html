@@ -1,77 +1,87 @@
 <html><pre>
-<b><font color='magenta'>#include &lt;stdio.h&gt;</b></font><b><font color='magenta'>#include &lt;stddef.h&gt;</b></font><b><font color='magenta'>#include &lt;stdlib.h&gt;</b></font><font color='green'>// Include local header files</font><b><font color='magenta'>#include &quot;error.c&quot;</b></font><b><font color='magenta'>#include &quot;init.c&quot;</b></font><b><font color='magenta'>#include &quot;pretty.h&quot;</b></font><b><font color='magenta'>#include &quot;symbol.c&quot;</b></font><font color='green'>/******************************************************************************/</font>
-0   <font color='green'>// typedefs</font><b><font color='blue'>typedef</font></b> <b><font color='blue'>struct</font></b> <a name='nodeT'><font color='blue'>nodeT</font></a> {
-1   
-2       <b><font color='blue'>int</font></b> <a name='key'><font color='blue'>key</font></a>;
-3       <b><font color='blue'>struct</font></b> <a href='#nodeT'><font color='blue'>nodeT</font></a> <b>*</b>  <a name='left'><font color='blue'>left</font></a>unrecognized input at line 17 <b>*</b>  <a name='right'><font color='blue'>right</font></a>;
-4       
-5   }
-6   <a name='NODE_TYPE'><font color='blue'>NODE_TYPE</font></a>;
+<b><font color='magenta'>#include &lt;stdio.h&gt;</b></font>
+0   <b><font color='magenta'>#include &lt;stddef.h&gt;</b></font>
+1   <b><font color='magenta'>#include &lt;stdlib.h&gt;</b></font>
+2   <font color='green'>// Include local header files</font>
+3   <b><font color='magenta'>#include &quot;error.c&quot;</b></font>
+4   <b><font color='magenta'>#include &quot;init.c&quot;</b></font>
+5   <b><font color='magenta'>#include &quot;pretty.h&quot;</b></font>
+6   <b><font color='magenta'>#include &quot;symbol.c&quot;</b></font>
 7   <font color='green'>/******************************************************************************/</font>
-8   <font color='green'>// Global variables</font><b><font color='blue'>int</font></b> <a name='global_1'><font color='blue'>global_1</font></a>unrecognized input at line 22<font color='brown'>100</font>;
-9   <b><font color='blue'>int</font></b> <a name='global_2'><font color='blue'>global_2</font></a>unrecognized input at line 22<font color='brown'>200</font>;
-10  <b><font color='blue'>float</font></b> <a name='global_float_1'><font color='blue'>global_float_1</font></a>unrecognized input at line 24<font color='brown'>100.100</font>;
-11  <b><font color='blue'>float</font></b> <a name='global_float_2'><font color='blue'>global_float_2</font></a>unrecognized input at line 24<font color='brown'>200.200</font>;
-12  <a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font></a> <b>*</b>  <a name='root'><font color='blue'>root</font></a>unrecognized input at line 26<font color='brown'>0</font>;
-13  <font color='green'>/******************************************************************************/</font>
-14  <b><font color='blue'>int</font></b> <a name='min'><font color='blue'>min</font></a>(<b><font color='blue'>int</font></b> <a name='a'><font color='blue'>a</font></a>unrecognized input at line 30<b><font color='blue'>int</font></b> <a name='b'><font color='blue'>b</font></a>) {
-15  
-16      <b><font color='blue'>return</font></b> (<a href='#a'><font color='blue'>a</font></a> <b>&gt;</b>  <a href='#b'><font color='blue'>b</font></a>unrecognized input at line 30<a href='#b'><font color='blue'>b</font></a>unrecognized input at line 30<a href='#a'><font color='blue'>a</font></a>);
-17      
-18  }
-19  <font color='green'>/******************************************************************************/</font>
-20  <b><font color='blue'>int</font></b> <a name='max'><font color='blue'>max</font></a>(<b><font color='blue'>int</font></b> <a href='#a'><font color='blue'>a</font></a>unrecognized input at line 34<b><font color='blue'>int</font></b> <a href='#b'><font color='blue'>b</font></a>) {
-21  
-22      <b><font color='blue'>return</font></b> (<a href='#a'><font color='blue'>a</font></a> <b>&lt;</b>  <a href='#b'><font color='blue'>b</font></a>unrecognized input at line 34<a href='#b'><font color='blue'>b</font></a>unrecognized input at line 34<a href='#a'><font color='blue'>a</font></a>);
-23      
-24  }
-25  <font color='green'>/******************************************************************************/</font>
-26  <b><font color='blue'>float</font></b> <a name='myfmax'><font color='blue'>myfmax</font></a>(<b><font color='blue'>float</font></b> <a name='x'><font color='blue'>x</font></a>unrecognized input at line 37<b><font color='blue'>float</font></b> <a name='y'><font color='blue'>y</font></a>) {
-27  
-28      <b><font color='blue'>return</font></b> (<a href='#x'><font color='blue'>x</font></a> <b>&lt;</b>  <a href='#y'><font color='blue'>y</font></a>unrecognized input at line 37<a href='#y'><font color='blue'>y</font></a>unrecognized input at line 37<a href='#x'><font color='blue'>x</font></a>);
-29      
-30  }
-31  <font color='green'>/******************************************************************************/</font>
-32  <b><font color='blue'>int</font></b> <a name='insertNode'><font color='blue'>insertNode</font></a>(<a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font></a> <b>*</b>   <b>*</b>  <a name='p'><font color='blue'>p</font></a>unrecognized input at line 41<b><font color='blue'>int</font></b> <a href='#key'><font color='blue'>key</font></a>) {
-33  
-34      <b><font color='blue'>int</font></b> <a name='rc'><font color='blue'>rc</font></a>unrecognized input at line 41<font color='brown'>0</font>;
-35      <b><font color='blue'>if</font></b> ( <b>*</b>  <a href='#p'><font color='blue'>p</font></a>) {
-36      
-37          <b><font color='blue'>if</font></b> (( <b>*</b>  <a href='#p'><font color='blue'>p</font></a>)unrecognized input at line 41 <b>&gt;</b>  <a href='#key'><font color='blue'>key</font></a> <b>&lt;</b>  <a href='#key'><font color='blue'>key</font></a>) {
-38          
-39              <a href='#rc'><font color='blue'>rc</font></a>unrecognized input at line 41<a href='#insertNode'><font color='blue'>insertNode</font></a>(unrecognized input at line 41(( <b>*</b>  <a href='#p'><font color='blue'>p</font></a>)unrecognized input at line 41 <b>&gt;</b>  <a href='#right'><font color='blue'>right</font></a>)unrecognized input at line 41<a href='#key'><font color='blue'>key</font></a>);
-40              
-41          }
-42          <b><font color='blue'>else</font></b> <b><font color='blue'>if</font></b> (( <b>*</b>  <a href='#p'><font color='blue'>p</font></a>)unrecognized input at line 41 <b>&gt;</b>  <a href='#key'><font color='blue'>key</font></a> <b>&gt;</b>  <a href='#key'><font color='blue'>key</font></a>) {
-43          
-44              <a href='#rc'><font color='blue'>rc</font></a>unrecognized input at line 41<a href='#insertNode'><font color='blue'>insertNode</font></a>(unrecognized input at line 41(( <b>*</b>  <a href='#p'><font color='blue'>p</font></a>)unrecognized input at line 41 <b>&gt;</b>  <a href='#left'><font color='blue'>left</font></a>)unrecognized input at line 41<a href='#key'><font color='blue'>key</font></a>);
-45              
-46          }
-47          
-48      }
-49      <b><font color='blue'>else</font></b>  {
-50      
-51          <a href='#rc'><font color='blue'>rc</font></a>unrecognized input at line 41<font color='brown'>1</font>;
-52           <b>*</b>  <a href='#p'><font color='blue'>p</font></a>unrecognized input at line 41(<a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font></a> <b>*</b>  )<a name='malloc'><font color='blue'>malloc</font></a>(<b><font color='blue'>sizeof</font></b> (<a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font></a>));
-53          ( <b>*</b>  <a href='#p'><font color='blue'>p</font></a>)unrecognized input at line 41 <b>&gt;</b>  <a href='#key'><font color='blue'>key</font></a>unrecognized input at line 41<a href='#key'><font color='blue'>key</font></a>;
-54          ( <b>*</b>  <a href='#p'><font color='blue'>p</font></a>)unrecognized input at line 41 <b>&gt;</b>  <a href='#left'><font color='blue'>left</font></a>unrecognized input at line 41<font color='brown'>0</font>;
-55          ( <b>*</b>  <a href='#p'><font color='blue'>p</font></a>)unrecognized input at line 41 <b>&gt;</b>  <a href='#right'><font color='blue'>right</font></a>unrecognized input at line 41<font color='brown'>0</font>;
-56          
-57      }
-58      <b><font color='blue'>return</font></b> (<a href='#rc'><font color='blue'>rc</font></a>);
-59      
-60  }
-61  <font color='green'>/******************************************************************************/</font>
-62  <b><font color='blue'>int</font></b> <a name='main'><font color='blue'>main</font></a>(<b><font color='blue'>int</font></b> <a name='argc'><font color='blue'>argc</font></a>unrecognized input at line 46<b><font color='blue'>char</font></b>  <b>*</b>  <a name='argv'><font color='blue'>argv</font></a>[]) {
-63  
-64      <b><font color='blue'>int</font></b> <a name='myInt1'><font color='blue'>myInt1</font></a>unrecognized input at line 46<a name='myInt_2'><font color='blue'>myInt_2</font></a>unrecognized input at line 46<a name='myInt_3'><font color='blue'>myInt_3</font></a>;
-65      <b><font color='blue'>int</font></b> <a href='#rc'><font color='blue'>rc</font></a>;
-66      <b><font color='blue'>float</font></b> <a name='myFloat_1'><font color='blue'>myFloat_1</font></a>unrecognized input at line 46<a name='myFloat_2'><font color='blue'>myFloat_2</font></a>unrecognized input at line 46<a name='myFloat_3'><font color='blue'>myFloat_3</font></a>;
-67      <a name='fprintf'><font color='blue'>fprintf</font></a>(<a name='stderr'><font color='blue'>stderr</font></a>unrecognized input at line 46<font color='red'>&quot;Size of nodeT is %d&quot;</font> unrecognized input at line 46<b><font color='blue'>sizeof</font></b> (<a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font></a>));
-68      <a name='myInt_1'><font color='blue'>myInt_1</font></a>unrecognized input at line 46<a href='#max'><font color='blue'>max</font></a>(<a href='#global_1'><font color='blue'>global_1</font></a>unrecognized input at line 46<a href='#global_2'><font color='blue'>global_2</font></a>)unrecognized input at line 46<a href='#min'><font color='blue'>min</font></a>(<a href='#global_1'><font color='blue'>global_1</font></a>unrecognized input at line 46<a href='#global_2'><font color='blue'>global_2</font></a>);
-69      <a href='#rc'><font color='blue'>rc</font></a>unrecognized input at line 46<a href='#insertNode'><font color='blue'>insertNode</font></a>(unrecognized input at line 46<a href='#root'><font color='blue'>root</font></a>unrecognized input at line 46<a href='#myInt_1'><font color='blue'>myInt_1</font></a>);
-70      <b><font color='blue'>return</font></b> (<a href='#rc'><font color='blue'>rc</font></a>);
-71      
-72  }
+8   <font color='green'>// typedefs</font>
+9   <b><font color='blue'>typedef</font> </b><b><font color='blue'>struct</font> </b><a name='nodeT'><font color='blue'>nodeT</font> </a> {
+10  
+11      <b><font color='blue'>int</font> </b><a name='key'><font color='blue'>key</font> </a>;
+12      <b><font color='blue'>struct</font> </b><a href='#nodeT'><font color='blue'>nodeT</font> </a> <b>*</b> <a name='left'><font color='blue'>left</font> </a> <b>&comma;</b>  <b>*</b> <a name='right'><font color='blue'>right</font> </a>;
+13      
+14  }
+15  <a name='NODE_TYPE'><font color='blue'>NODE_TYPE</font> </a>;
+16  <font color='green'>/******************************************************************************/</font>
+17  <font color='green'>// Global variables</font>
+18  <b><font color='blue'>int</font> </b><a name='global_1'><font color='blue'>global_1</font> </a> <b>&equals;</b> <font color='brown'>100</font>;
+19  <b><font color='blue'>int</font> </b><a name='global_2'><font color='blue'>global_2</font> </a> <b>&equals;</b> <font color='brown'>200</font>;
+20  <b><font color='blue'>float</font> </b><a name='global_float_1'><font color='blue'>global_float_1</font> </a> <b>&equals;</b> <font color='brown'>100.100</font>;
+21  <b><font color='blue'>float</font> </b><a name='global_float_2'><font color='blue'>global_float_2</font> </a> <b>&equals;</b> <font color='brown'>200.200</font>;
+22  <a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font> </a> <b>*</b> <a name='root'><font color='blue'>root</font> </a> <b>&equals;</b> <font color='brown'>0</font>;
+23  <font color='green'>/******************************************************************************/</font>
+24  <b><font color='blue'>int</font> </b><a name='min'><font color='blue'>min</font> </a>(<b><font color='blue'>int</font> </b><a name='a'><font color='blue'>a</font> </a> <b>&comma;</b> <b><font color='blue'>int</font> </b><a name='b'><font color='blue'>b</font> </a>) {
+25  
+26      <b><font color='blue'>return</font> </b>(<a href='#a'><font color='blue'>a</font> </a> <b>&gt;</b> <a href='#b'><font color='blue'>b</font> </a> <b>&quest;</b> <a href='#b'><font color='blue'>b</font> </a> <b>&colon;</b> <a href='#a'><font color='blue'>a</font> </a>);
+27      
+28  }
+29  <font color='green'>/******************************************************************************/</font>
+30  <b><font color='blue'>int</font> </b><a name='max'><font color='blue'>max</font> </a>(<b><font color='blue'>int</font> </b><a href='#a'><font color='blue'>a</font> </a> <b>&comma;</b> <b><font color='blue'>int</font> </b><a href='#b'><font color='blue'>b</font> </a>) {
+31  
+32      <b><font color='blue'>return</font> </b>(<a href='#a'><font color='blue'>a</font> </a> <b>&lt;</b> <a href='#b'><font color='blue'>b</font> </a> <b>&quest;</b> <a href='#b'><font color='blue'>b</font> </a> <b>&colon;</b> <a href='#a'><font color='blue'>a</font> </a>);
+33      
+34  }
+35  <font color='green'>/******************************************************************************/</font>
+36  <b><font color='blue'>float</font> </b><a name='myfmax'><font color='blue'>myfmax</font> </a>(<b><font color='blue'>float</font> </b><a name='x'><font color='blue'>x</font> </a> <b>&comma;</b> <b><font color='blue'>float</font> </b><a name='y'><font color='blue'>y</font> </a>) {
+37  
+38      <b><font color='blue'>return</font> </b>(<a href='#x'><font color='blue'>x</font> </a> <b>&lt;</b> <a href='#y'><font color='blue'>y</font> </a> <b>&quest;</b> <a href='#y'><font color='blue'>y</font> </a> <b>&colon;</b> <a href='#x'><font color='blue'>x</font> </a>);
+39      
+40  }
+41  <font color='green'>/******************************************************************************/</font>
+42  <b><font color='blue'>int</font> </b><a name='insertNode'><font color='blue'>insertNode</font> </a>(<a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font> </a> <b>*</b>  <b>*</b> <a name='p'><font color='blue'>p</font> </a> <b>&comma;</b> <b><font color='blue'>int</font> </b><a href='#key'><font color='blue'>key</font> </a>) {
+43  
+44      <b><font color='blue'>int</font> </b><a name='rc'><font color='blue'>rc</font> </a> <b>&equals;</b> <font color='brown'>0</font>;
+45      <b><font color='blue'>if</font> </b>( <b>*</b> <a href='#p'><font color='blue'>p</font> </a>) {
+46      
+47          <b><font color='blue'>if</font> </b>(( <b>*</b> <a href='#p'><font color='blue'>p</font> </a>) <b>&dash;</b>  <b>&gt;</b> <a href='#key'><font color='blue'>key</font> </a> <b>&lt;</b> <a href='#key'><font color='blue'>key</font> </a>) {
+48          
+49              <a href='#rc'><font color='blue'>rc</font> </a> <b>&equals;</b> <a href='#insertNode'><font color='blue'>insertNode</font> </a>( <b>&amp;</b> (( <b>*</b> <a href='#p'><font color='blue'>p</font> </a>) <b>&dash;</b>  <b>&gt;</b> <a href='#right'><font color='blue'>right</font> </a>) <b>&comma;</b> <a href='#key'><font color='blue'>key</font> </a>);
+50              
+51          }
+52          <b><font color='blue'>else</font> </b><b><font color='blue'>if</font> </b>(( <b>*</b> <a href='#p'><font color='blue'>p</font> </a>) <b>&dash;</b>  <b>&gt;</b> <a href='#key'><font color='blue'>key</font> </a> <b>&gt;</b> <a href='#key'><font color='blue'>key</font> </a>) {
+53          
+54              <a href='#rc'><font color='blue'>rc</font> </a> <b>&equals;</b> <a href='#insertNode'><font color='blue'>insertNode</font> </a>( <b>&amp;</b> (( <b>*</b> <a href='#p'><font color='blue'>p</font> </a>) <b>&dash;</b>  <b>&gt;</b> <a href='#left'><font color='blue'>left</font> </a>) <b>&comma;</b> <a href='#key'><font color='blue'>key</font> </a>);
+55              
+56          }
+57          
+58      }
+59      <b><font color='blue'>else</font> </b> {
+60      
+61          <a href='#rc'><font color='blue'>rc</font> </a> <b>&equals;</b> <font color='brown'>1</font>;
+62           <b>*</b> <a href='#p'><font color='blue'>p</font> </a> <b>&equals;</b> (<a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font> </a> <b>*</b> )<a name='malloc'><font color='blue'>malloc</font> </a>(<b><font color='blue'>sizeof</font> </b>(<a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font> </a>));
+63          ( <b>*</b> <a href='#p'><font color='blue'>p</font> </a>) <b>&dash;</b>  <b>&gt;</b> <a href='#key'><font color='blue'>key</font> </a> <b>&equals;</b> <a href='#key'><font color='blue'>key</font> </a>;
+64          ( <b>*</b> <a href='#p'><font color='blue'>p</font> </a>) <b>&dash;</b>  <b>&gt;</b> <a href='#left'><font color='blue'>left</font> </a> <b>&equals;</b> <font color='brown'>0</font>;
+65          ( <b>*</b> <a href='#p'><font color='blue'>p</font> </a>) <b>&dash;</b>  <b>&gt;</b> <a href='#right'><font color='blue'>right</font> </a> <b>&equals;</b> <font color='brown'>0</font>;
+66          
+67      }
+68      <b><font color='blue'>return</font> </b>(<a href='#rc'><font color='blue'>rc</font> </a>);
+69      
+70  }
+71  <font color='green'>/******************************************************************************/</font>
+72  <b><font color='blue'>int</font> </b><a name='main'><font color='blue'>main</font> </a>(<b><font color='blue'>int</font> </b><a name='argc'><font color='blue'>argc</font> </a> <b>&comma;</b> <b><font color='blue'>char</font> </b> <b>*</b> <a name='argv'><font color='blue'>argv</font> </a>[]) {
 73  
+74      <b><font color='blue'>int</font> </b><a name='myInt1'><font color='blue'>myInt1</font> </a> <b>&comma;</b> <a name='myInt_2'><font color='blue'>myInt_2</font> </a> <b>&comma;</b> <a name='myInt_3'><font color='blue'>myInt_3</font> </a>;
+75      <b><font color='blue'>int</font> </b><a href='#rc'><font color='blue'>rc</font> </a>;
+76      <b><font color='blue'>float</font> </b><a name='myFloat_1'><font color='blue'>myFloat_1</font> </a> <b>&comma;</b> <a name='myFloat_2'><font color='blue'>myFloat_2</font> </a> <b>&comma;</b> <a name='myFloat_3'><font color='blue'>myFloat_3</font> </a>;
+77      <a name='fprintf'><font color='blue'>fprintf</font> </a>(<a name='stderr'><font color='blue'>stderr</font> </a> <b>&comma;</b> <font color='red'>&quot;Size of nodeT is %d&quot;</font> <b>&comma;</b> <b><font color='blue'>sizeof</font> </b>(<a href='#NODE_TYPE'><font color='blue'>NODE_TYPE</font> </a>));
+78      <a name='myInt_1'><font color='blue'>myInt_1</font> </a> <b>&equals;</b> <a href='#max'><font color='blue'>max</font> </a>(<a href='#global_1'><font color='blue'>global_1</font> </a> <b>&comma;</b> <a href='#global_2'><font color='blue'>global_2</font> </a>) <b>&dash;</b> <a href='#min'><font color='blue'>min</font> </a>(<a href='#global_1'><font color='blue'>global_1</font> </a> <b>&comma;</b> <a href='#global_2'><font color='blue'>global_2</font> </a>);
+79      <a href='#rc'><font color='blue'>rc</font> </a> <b>&equals;</b> <a href='#insertNode'><font color='blue'>insertNode</font> </a>( <b>&amp;</b> <a href='#root'><font color='blue'>root</font> </a> <b>&comma;</b> <a href='#myInt_1'><font color='blue'>myInt_1</font> </a>);
+80      <b><font color='blue'>return</font> </b>(<a href='#rc'><font color='blue'>rc</font> </a>);
+81      
+82  }
+83  
 </pre></html>

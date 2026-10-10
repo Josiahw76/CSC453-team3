@@ -72,16 +72,22 @@ number		{digit}+(\.{digit}+)?{exp}?
 ";"				write_sep();
 "+"				write_op();
 "+="				write_op();
+"-"				write_op();
 "<"				write_op();
 ">"				write_op();
 "<="				write_op();
 ">="				write_op();
 "=="				write_op();
 "!="				write_op();
+"&"				write_op();
 "&&"				write_op();
 "||"				write_op();
+"->"				write_op();
 "*"				write_op();
-
+"="				write_op();
+"?"				write_op();
+","				write_op();
+":"				write_op();
 "::"				write_op();
 "//"[^\n]*			write_inline();
 (\/\/[^\n]*)|(\/\*([^*]|\*+[^*/])*\*+\/)	write_comment();
@@ -121,10 +127,19 @@ void write_html_char(int c) {
 		printf("&add;");
 		break;
 	case '-':
-		printf("&sub;");
+		printf("&dash;");
 		break;
 	case '=':
-		printf("&eq;");
+		printf("&equals;");
+		break;
+	case '?':
+		printf("&quest;");
+		break;
+	case ',':
+		printf("&comma;");
+		break;
+	case ':':
+		printf("&colon;");
 		break;
 	case '\n':
 	    if (inComment) {
@@ -150,7 +165,7 @@ void write_char() {
     }
     printf("<u><font color='brown'>");
     write_html();
-    printf("</font></u> ");
+    printf("</font></u>");
 }
 
 void write_string() {
@@ -160,7 +175,7 @@ void write_string() {
     }
 	printf("<font color='red'>");
 	write_html();
-	printf("</font> ");
+	printf("</font>");
 
 }
 
@@ -171,7 +186,7 @@ void write_oct() {
     }
 	printf("<i><font color='brown'>");
     write_html();
-    printf("</i></font> ");
+    printf("</i></font>");
 }
 
 void write_hex() {
@@ -181,7 +196,7 @@ void write_hex() {
     }
 	printf("<i><font color='brown'>");
     write_html();
-    printf("</i></font> ");
+    printf("</i></font>");
 
 }
 
@@ -229,10 +244,10 @@ void write_id() {
 
     printf("<font color='blue'>");
     write_html();
-    printf("</font>");
+    printf("</font> ");
 
     if (kw)  {
-	printf("</b> ");
+	printf("</b>");
     } else {
 	printf("</a>");
     }
@@ -290,7 +305,7 @@ write_sep() {
     write_html();
     if (!paren) {
 	write_indent();
-    } else  {
+    } else {
 	putchar(' ');
     }
 }
@@ -303,7 +318,7 @@ write_op() {
     putchar(' ');
     printf("<b>");
     write_html();
-    printf("</b> ");
+    printf("</b>");
     putchar(' ');
 }
 
@@ -317,8 +332,8 @@ write_inline() {
     printf("<font color='green'>");
     write_html();
     printf("</font>");
+	write_indent();
     inComment = FALSE;
-
 }
 
 void
@@ -344,6 +359,7 @@ write_directive() {
 	printf("<b><font color='magenta'>");
 	write_html();
     printf("</b></font>");
+	write_indent();
 
 
 
