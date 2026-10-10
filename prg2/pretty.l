@@ -8,7 +8,7 @@
 
 #define INDENT (4)
 
-int line = 0;
+int line = 1;
 int column = 4;
 int paren = 0;
 int inComment = 0;
@@ -123,6 +123,7 @@ number		{digit}+(\.{digit}+)?{exp}?
 int main() {
     myInit();
     printf("<html><pre>\n");
+	write_indent();
     yylex();
     printf("\n</pre></html>\n");
     return 0;
@@ -209,7 +210,7 @@ void write_oct() {
     }
 	printf("<i><font color='brown'>");
     write_html();
-    printf("</i></font>");
+    printf("</font></i>");
 }
 
 void write_hex() {
@@ -219,7 +220,7 @@ void write_hex() {
     }
 	printf("<i><font color='brown'>");
     write_html();
-    printf("</i></font>");
+    printf("</font></i>");
 
 }
 
@@ -381,7 +382,7 @@ write_directive() {
     }
 	printf("<b><font color='magenta'>");
 	write_html();
-    printf("</b></font>");
+    printf("</font></b>");
 	write_indent();
 
 
