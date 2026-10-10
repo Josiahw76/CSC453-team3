@@ -89,7 +89,30 @@ number		{digit}+(\.{digit}+)?{exp}?
 ","				write_op();
 ":"				write_op();
 "::"				write_op();
+
+"/"				write_op();
+"%"				write_op();
+"++"				write_op();
+"--"				write_op();
+"!"				write_op();
+"~"				write_op();
+"|"				write_op();
+"^"				write_op();
+"<<"				write_op();
+">>"				write_op();
+"."				write_op();
+"-="				write_op();
+"*="				write_op();
+"/="				write_op();
+"%="				write_op();
+"&="				write_op();
+"|="				write_op();
+"^="				write_op();
+"<<="				write_op();
+">>="				write_op();
+
 "//"[^\n]*			write_inline();
+
 (\/\/[^\n]*)|(\/\*([^*]|\*+[^*/])*\*+\/)	write_comment();
 #[^\n]*				write_directive();
 .				printf("unrecognized input at line %d", yylineno);
