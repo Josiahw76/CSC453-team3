@@ -26,12 +26,18 @@ int             {digit}+
 
 %%
 
+/* todo sections in here were filled out by Josiah */
+
 [ \t\v\n\f\r]                  /* skip white space */
-___                            /* TODO: TO BE COMPLETED: ignore inline and multiline comments */
+
+			       /* copied from p2 prettyprint */
+(\/\/[^\n]*)|(\/\*([^*]|\*+[^*/])*\*+\/)	{/* multiline comment */}
+"//"[^\n]*					{/* inline comment */}
+
 {id}                           { return install_id(); }
-___                            { /* TODO: TO BE COMPLETED */ return install_oct(); }
-___                            { /* TODO: TO BE COMPLETED */ return install_hex(); }
-___                            { /* TODO: TO BE COMPLETED */ return install_chr(); }
+0[0-7]*(U|L|UL|LU)?            		{ return install_oct(); }
+0(x|X){digit|[A-Fa-f]}*(U|L|UL|LU)?	{ return install_hex(); }
+[\x00-\x7F]	 	       { return install_chr(); }
 {int}                          { return install_int(); }
 "+="                           { return PA; }
 "-="                           { return NA; }
@@ -122,7 +128,8 @@ static int install_hex()
 /* install_chr - convert ASCII character yytext[1] to yylval.num and return INT8 */
 static int install_chr()
 {
-	/* TODO: TO BE COMPLETED */
+	/* not sure whether to write [0] or [1] */
+	sscanf(yytext[0], "%c", &yylval.num);
 
 	return INT8;
 }
