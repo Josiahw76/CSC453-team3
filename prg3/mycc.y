@@ -68,46 +68,55 @@ stmt    : ';'
         ;
 
 expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
-        | ID   PA  expr { /* TODO: TO BE COMPLETED */ error("+= operator not implemented"); }
-        | ID   NA  expr { /* TODO: TO BE COMPLETED */ error("-= operator not implemented"); }
-        | ID   TA  expr { /* TODO: TO BE COMPLETED */ error("*= operator not implemented"); }
-        | ID   DA  expr { /* TODO: TO BE COMPLETED */ error("/= operator not implemented"); }
-        | ID   MA  expr { /* TODO: TO BE COMPLETED */ error("%= operator not implemented"); }
-        | ID   AA  expr { /* TODO: TO BE COMPLETED */ error("&= operator not implemented"); }
-        | ID   XA  expr { /* TODO: TO BE COMPLETED */ error("^= operator not implemented"); }
-        | ID   OA  expr { /* TODO: TO BE COMPLETED */ error("|= operator not implemented"); }
-        | ID   LA  expr { /* TODO: TO BE COMPLETED */ error("<<= operator not implemented"); }
-        | ID   RA  expr { /* TODO: TO BE COMPLETED */ error(">>= operator not implemented"); }
-        | expr OR  expr { /* TODO: TO BE COMPLETED */ error("|| operator not implemented"); }
-        | expr AN  expr { /* TODO: TO BE COMPLETED */ error("&& operator not implemented"); }
-        | expr '|' expr { /* TODO: TO BE COMPLETED */ error("| operator not implemented"); }
-        | expr '^' expr { /* TODO: TO BE COMPLETED */ error("^ operator not implemented"); }
-        | expr '&' expr { /* TODO: TO BE COMPLETED */ error("& operator not implemented"); }
-        | expr EQ  expr { /* TODO: TO BE COMPLETED */ error("== operator not implemented"); }
-        | expr NE  expr { /* TODO: TO BE COMPLETED */ error("!= operator not implemented"); }
-        | expr '<' expr { /* TODO: TO BE COMPLETED */ error("< operator not implemented"); }
-        | expr '>' expr { /* TODO: TO BE COMPLETED */ error("> operator not implemented"); }
-        | expr LE  expr { /* TODO: TO BE COMPLETED */ error("<= operator not implemented"); }
-        | expr GE  expr { /* TODO: TO BE COMPLETED */ error(">= operator not implemented"); }
-        | expr LS  expr { /* TODO: TO BE COMPLETED */ error("<< operator not implemented"); }
-        | expr RS  expr { /* TODO: TO BE COMPLETED */ error(">> operator not implemented"); }
-        | expr '+' expr { /* TODO: TO BE COMPLETED */ error("+ operator not implemented"); }
-        | expr '-' expr { /* TODO: TO BE COMPLETED */ error("- operator not implemented"); }
-        | expr '*' expr { /* TODO: TO BE COMPLETED */ error("* operator not implemented"); }
-        | expr '/' expr { /* TODO: TO BE COMPLETED */ error("/ operator not implemented"); }
-        | expr '%' expr { /* TODO: TO BE COMPLETED */ error("% operator not implemented"); }
-        | '!' expr      { /* TODO: TO BE COMPLETED */ error("! operator not implemented"); }
-        | '~' expr      { /* TODO: TO BE COMPLETED */ error("~ operator not implemented"); }
+
+	/* Note: May need to add in an emit(iload, $1->localvar); for the compound assignment operators. */
+        | ID   PA  expr { emit(iadd); emit(dup); emit2(istore, $1->localvar) }
+        | ID   NA  expr { emit(isub); emit(dup); emit2(istore, $1->localvar) }
+        | ID   TA  expr { emit(imul); emit(dup); emit2(istore, $1->localvar) }
+        | ID   DA  expr { emit(idiv); emit(dup); emit2(istore, $1->localvar) }
+        | ID   MA  expr { emit(irem); emit(dup); emit2(istore, $1->localvar) }
+        | ID   AA  expr { emit(iand); emit(dup); emit2(istore, $1->localvar) }
+        | ID   XA  expr { emit(ixor); emit(dup); emit2(istore, $1->localvar) }
+        | ID   OA  expr { emit(ior); emit(dup); emit2(istore, $1->localvar) }
+        | ID   LA  expr { emit(ishl); emit(dup); emit2(istore, $1->localvar) }
+        | ID   RA  expr { emit(ishr); emit(dup); emit2(istore, $1->localvar) }
+
+	/* evaluates both terms. True short-circuit evaluation needs a marker non-terminal */
+        | expr OR  expr { emit3(ifne, pc+4); emit3(ifne, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
+        | expr AN  expr { emit3(ifeq, pc+4); emit3(ifeq, pc+3); emit(iconst_1); emit3(goto_, pc+2); emit(iconst_0); }
+
+        | expr '|' expr { emit(ior); }
+        | expr '^' expr { emit(ixor); }
+        | expr '&' expr { emit(iand); }
+
+	/* If the evaluation is true, branch. Otherwise, flow continues. True should emit 1, false 0, so use offsets and jumps to emit the correct one. */
+        | expr EQ  expr { emit3(if_icmpeq, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
+        | expr NE  expr { emit3(if_icmpne, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
+        | expr '<' expr { emit3(if_icmplt, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
+        | expr '>' expr { emit3(if_icmpgt, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
+        | expr LE  expr { emit3(if_icmple, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
+        | expr GE  expr { emit3(if_icmpge, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
+	/* comparisons */
+
+        | expr LS  expr { emit(ishl); }
+        | expr RS  expr { emit(ishr); }
+        | expr '+' expr { emit(iadd); }
+        | expr '-' expr { emit(isub); }
+        | expr '*' expr { emit(imul); }
+        | expr '/' expr { emit(idiv); }
+        | expr '%' expr { emit(irem); }
+        | '!' expr      { /* TODO: TO BE COMPLETED */ error("! operator not implemented"); }	 { emit(); }
+        | '~' expr      { /* TODO: TO BE COMPLETED */ error("~ operator not implemented"); }	 { emit(); }
         | '+' expr %prec '!' /* '+' at same precedence level as '!' */
                         { /* TODO: TO BE COMPLETED */ error("unary + operator not implemented"); }
         | '-' expr %prec '!' /* '-' at same precedence level as '!' */
                         { /* TODO: TO BE COMPLETED */ error("unary - operator not implemented"); }
         | '(' expr ')'
         | '$' INT8      { emit(aload_1); emit2(bipush, $2); emit(iaload); }
-        | PP ID         { /* TODO: TO BE COMPLETED */ error("pre ++ operator not implemented"); }
-        | NN ID         { /* TODO: TO BE COMPLETED */ error("pre -- operator not implemented"); }
-        | ID PP         { /* TODO: TO BE COMPLETED */ error("post ++ operator not implemented"); }
-        | ID NN         { /* TODO: TO BE COMPLETED */ error("post -- operator not implemented"); }
+        | PP ID         { $2->localvar = $2->localvar + 1; emit($2->localvar); }
+        | NN ID         { $2->localvar = $2->localvar - 1; emit($2->localvar); }
+        | ID PP         { emit($2->localvar); $2->localvar = $2->localvar + 1; }
+        | ID NN         { emit($2->localvar); $2->localvar = $2->localvar - 1; }
         | ID            { emit2(iload, $1->localvar); }
         | INT8          { emit2(bipush, $1); }
         | INT16         { emit3(sipush, $1); }

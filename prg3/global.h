@@ -9,6 +9,8 @@ struct Symbol
 	const char *lexptr;
 	int  token;
 	int  localvar;
+	// when is localvar assigned?
+	// any time a = operator shows up
 };
 
 typedef struct Symbol Symbol;
