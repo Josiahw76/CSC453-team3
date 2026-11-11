@@ -69,17 +69,30 @@ stmt    : ';'
 
 expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
 
-	/* Note: May need to add in an emit(iload, $1->localvar); for the compound assignment operators. */
-        | ID   PA  expr { emit(iadd); emit(dup); emit2(istore, $1->localvar) }
-        | ID   NA  expr { emit(isub); emit(dup); emit2(istore, $1->localvar) }
-        | ID   TA  expr { emit(imul); emit(dup); emit2(istore, $1->localvar) }
-        | ID   DA  expr { emit(idiv); emit(dup); emit2(istore, $1->localvar) }
-        | ID   MA  expr { emit(irem); emit(dup); emit2(istore, $1->localvar) }
-        | ID   AA  expr { emit(iand); emit(dup); emit2(istore, $1->localvar) }
-        | ID   XA  expr { emit(ixor); emit(dup); emit2(istore, $1->localvar) }
-        | ID   OA  expr { emit(ior); emit(dup); emit2(istore, $1->localvar) }
-        | ID   LA  expr { emit(ishl); emit(dup); emit2(istore, $1->localvar) }
-        | ID   RA  expr { emit(ishr); emit(dup); emit2(istore, $1->localvar) }
+	/* Note: May not need to add in an emit(iload, $1->localvar); */
+	/* Compound assignment operators: emit the value in ID, */
+	/* do the operation, dupe it, put back to id. */
+	/* Leaves the id on the stack for subsequent operations */
+        | ID   PA  expr { emit(iload, $1->localvar); emit(iadd); 
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   NA  expr { emit(iload, $1->localvar); emit(isub); 
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   TA  expr { emit(iload, $1->localvar); emit(imul); 
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   DA  expr { emit(iload, $1->localvar); emit(idiv); 
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   MA  expr { emit(iload, $1->localvar); emit(irem); 
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   AA  expr { emit(iload, $1->localvar); emit(iand); 
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   XA  expr { emit(iload, $1->localvar); emit(ixor); 
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   OA  expr { emit(iload, $1->localvar); emit(ior);
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   LA  expr { emit(iload, $1->localvar); emit(ishl); 
+				emit(dup); emit2(istore, $1->localvar) }
+        | ID   RA  expr { emit(iload, $1->localvar); emit(ishr); 
+				emit(dup); emit2(istore, $1->localvar) }
 
 	/* evaluates both terms. True short-circuit evaluation needs a marker non-terminal */
         | expr OR  expr { emit3(ifne, pc+4); emit3(ifne, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
@@ -89,7 +102,9 @@ expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
         | expr '^' expr { emit(ixor); }
         | expr '&' expr { emit(iand); }
 
-	/* If the evaluation is true, branch. Otherwise, flow continues. True should emit 1, false 0, so use offsets and jumps to emit the correct one. */
+	/* If the evaluation is true, branch. Otherwise, flow continues. */
+	/* True should emit 1, false 0, so use offsets and jumps to */
+	/* emit the correct one. */
         | expr EQ  expr { emit3(if_icmpeq, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
         | expr NE  expr { emit3(if_icmpne, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
         | expr '<' expr { emit3(if_icmplt, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
@@ -105,12 +120,12 @@ expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
         | expr '*' expr { emit(imul); }
         | expr '/' expr { emit(idiv); }
         | expr '%' expr { emit(irem); }
-        | '!' expr      { /* TODO: TO BE COMPLETED */ error("! operator not implemented"); }	 { emit(); }
+
+	/* If true, emit false. If false, emit true. ifeq flows forward if value is 1, jumps if 0. */
+        | '!' expr      { emit3(ifeq, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
         | '~' expr      { /* TODO: TO BE COMPLETED */ error("~ operator not implemented"); }	 { emit(); }
-        | '+' expr %prec '!' /* '+' at same precedence level as '!' */
-                        { /* TODO: TO BE COMPLETED */ error("unary + operator not implemented"); }
-        | '-' expr %prec '!' /* '-' at same precedence level as '!' */
-                        { /* TODO: TO BE COMPLETED */ error("unary - operator not implemented"); }
+        | '+' expr %prec '!' /* '+' at same precedence level as '!' */ { /* do nothing */ }
+        | '-' expr %prec '!' /* '-' at same precedence level as '!' */ { emit(ineg); }
         | '(' expr ')'
         | '$' INT8      { emit(aload_1); emit2(bipush, $2); emit(iaload); }
         | PP ID         { $2->localvar = $2->localvar + 1; emit($2->localvar); }
