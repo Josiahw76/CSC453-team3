@@ -73,25 +73,25 @@ expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
 	/* Compound assignment operators: emit the value in ID, */
 	/* do the operation, dupe it, put back to id. */
 	/* Leaves the id on the stack for subsequent operations */
-        | ID   PA  expr { emit(iload, $1->localvar); emit(iadd); 
+        | ID   PA  expr { emit2(iload, $1->localvar); emit(iadd); 
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   NA  expr { emit(iload, $1->localvar); emit(isub); 
+        | ID   NA  expr { emit2(iload, $1->localvar); emit(isub); 
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   TA  expr { emit(iload, $1->localvar); emit(imul); 
+        | ID   TA  expr { emit2(iload, $1->localvar); emit(imul); 
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   DA  expr { emit(iload, $1->localvar); emit(idiv); 
+        | ID   DA  expr { emit2(iload, $1->localvar); emit(idiv); 
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   MA  expr { emit(iload, $1->localvar); emit(irem); 
+        | ID   MA  expr { emit2(iload, $1->localvar); emit(irem); 
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   AA  expr { emit(iload, $1->localvar); emit(iand); 
+        | ID   AA  expr { emit2(iload, $1->localvar); emit(iand); 
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   XA  expr { emit(iload, $1->localvar); emit(ixor); 
+        | ID   XA  expr { emit2(iload, $1->localvar); emit(ixor); 
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   OA  expr { emit(iload, $1->localvar); emit(ior);
+        | ID   OA  expr { emit2(iload, $1->localvar); emit(ior);
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   LA  expr { emit(iload, $1->localvar); emit(ishl); 
+        | ID   LA  expr { emit2(iload, $1->localvar); emit(ishl); 
 				emit(dup); emit2(istore, $1->localvar) }
-        | ID   RA  expr { emit(iload, $1->localvar); emit(ishr); 
+        | ID   RA  expr { emit2(iload, $1->localvar); emit(ishr); 
 				emit(dup); emit2(istore, $1->localvar) }
 
 	/* evaluates both terms. True short-circuit evaluation needs a marker non-terminal */
