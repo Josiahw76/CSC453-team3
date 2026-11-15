@@ -39,8 +39,13 @@ static struct ClassFile cf;
 
 /* Declare attribute types for marker nonterminals, such as L M and N */
 /* TODO: TO BE COMPLETED WITH ADDITIONAL NONMARKERS AS NECESSARY */
-%type <loc> L M N
+%type <loc> L M N 
 
+/* 
+L records the current address 
+M emits ifeq which is not known yet and records where it is
+N emits goto which is not knwon yet and records where it is
+*/
 %%
 
 stmts   : stmts stmt
@@ -49,16 +54,27 @@ stmts   : stmts stmt
 
 stmt    : ';'
         | expr ';'      { emit(pop); /* do not leave a value on the stack */ }
-        | IF '(' expr ')' stmt
-                        { /* TODO: TO BE COMPLETED */ error("if-then not implemented"); }
-        | IF '(' expr ')' stmt ELSE stmt
-                        { /* TODO: TO BE COMPLETED */ error("if-then-else not implemented"); }
-        | WHILE '(' expr ')' stmt
-                        { /* TODO: TO BE COMPLETED */ error("while-loop not implemented"); }
-        | DO stmt WHILE '(' expr ')' ';'
-                        { /* TODO: TO BE COMPLETED */ error("do-while-loop not implemented"); }
-        | FOR '(' expr ';' expr ';' expr ')' stmt
-                        { /* TODO: TO BE COMPLETED */ error("for-loop not implemented"); }
+        | IF '(' expr ')' M stmt
+                        { backpatch($5, pc - $5); }
+						/* error("if-then not implemented");  */
+
+        | IF '(' expr ')' M stmt ELSE N L stmt
+                        { backpatch($5, $9 - $5);      
+                          backpatch($8, pc - $8);   }
+						  /* error("if-then-else not implemented"); */
+        | WHILE '(' L expr ')' M stmt N
+                        { backpatch($6, pc - $6);    
+                          backpatch($8, $3 - $8); }
+						  /* error("while-loop not implemented");  */
+        | DO L stmt WHILE '(' expr ')' ';'
+                        { emit3(ifne, $2 - pc);  }
+						/* error("do-while-loop not implemented"); */
+        | FOR '(' expr { emit(pop); } ';' L expr M N ';' L expr { emit(pop); } N ')' L stmt N
+                        { backpatch($8,  pc  - $8);
+                          backpatch($9,  $16 - $9);
+                          backpatch($14, $6  - $14);
+                          backpatch($18, $11 - $18);    }
+						  /* error("for-loop not implemented"); */
         | RETURN expr ';'
                         { emit(istore_2); /* return val goes in local var 2 */ }
         | BREAK ';'
