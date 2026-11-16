@@ -1,4 +1,4 @@
-/* TODO: TO BE COMPLETED */
+	/* TODO: TO BE COMPLETED */
 
 %option noyywrap
 %option yylineno
@@ -26,7 +26,7 @@ int             {digit}+
 
 %%
 
-/* todo sections in here were filled out by Josiah */
+	/* todo sections in here were filled out by Josiah */
 
 [ \t\v\n\f\r]                  /* skip white space */
 
