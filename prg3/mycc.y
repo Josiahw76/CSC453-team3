@@ -146,8 +146,8 @@ expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
         | '$' INT8      { emit(aload_1); emit2(bipush, $2); emit(iaload); }
         | PP ID         { $2->localvar = $2->localvar + 1; emit($2->localvar); }
         | NN ID         { $2->localvar = $2->localvar - 1; emit($2->localvar); }
-        | ID PP         { emit($2->localvar); $2->localvar = $2->localvar + 1; }
-        | ID NN         { emit($2->localvar); $2->localvar = $2->localvar - 1; }
+        | ID PP         { emit($1->localvar); $1->localvar = $1->localvar + 1; }
+        | ID NN         { emit($1->localvar); $1->localvar = $1->localvar - 1; }
         | ID            { emit2(iload, $1->localvar); }
         | INT8          { emit2(bipush, $1); }
         | INT16         { emit3(sipush, $1); }
