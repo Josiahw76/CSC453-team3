@@ -202,6 +202,275 @@ void yyfree ( void *  );
 
 /* Begin user sect3 */
 
-#line 205 "lex.yy.h"
+#define yywrap() (/*CONSTCOND*/1)
+#define YY_SKIP_YYWRAP
+
+extern int yylineno;
+
+extern char *yytext;
+#ifdef yytext_ptr
+#undef yytext_ptr
+#endif
+#define yytext_ptr yytext
+
+#ifdef YY_HEADER_EXPORT_START_CONDITIONS
+#define INITIAL 0
+
+#endif
+
+#ifndef YY_NO_UNISTD_H
+/* Special case for "unistd.h", since it is non-ANSI. We include it way
+ * down here because we want the user's section 1 to have been scanned first.
+ * The user has a chance to override it with an option.
+ */
+#include <unistd.h>
+#endif
+
+#ifndef YY_EXTRA_TYPE
+#define YY_EXTRA_TYPE void *
+#endif
+
+/* Accessor methods to globals.
+   These are made visible to non-reentrant scanners for convenience. */
+
+int yylex_destroy ( void );
+
+int yyget_debug ( void );
+
+void yyset_debug ( int debug_flag  );
+
+YY_EXTRA_TYPE yyget_extra ( void );
+
+void yyset_extra ( YY_EXTRA_TYPE user_defined  );
+
+FILE *yyget_in ( void );
+
+void yyset_in  ( FILE * _in_str  );
+
+FILE *yyget_out ( void );
+
+void yyset_out  ( FILE * _out_str  );
+
+			yy_size_t yyget_leng ( void );
+
+char *yyget_text ( void );
+
+int yyget_lineno ( void );
+
+void yyset_lineno ( int _line_number  );
+
+/* Macros after this point can all be overridden by user definitions in
+ * section 1.
+ */
+
+#ifndef YY_SKIP_YYWRAP
+#ifdef __cplusplus
+extern "C" int yywrap ( void );
+#else
+extern int yywrap ( void );
+#endif
+#endif
+
+#ifndef yytext_ptr
+static void yy_flex_strncpy ( char *, const char *, int );
+#endif
+
+#ifdef YY_NEED_STRLEN
+static int yy_flex_strlen ( const char * );
+#endif
+
+#ifndef YY_NO_INPUT
+
+#endif
+
+/* Amount of stuff to slurp up with each read. */
+#ifndef YY_READ_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k */
+#define YY_READ_BUF_SIZE 16384
+#else
+#define YY_READ_BUF_SIZE 8192
+#endif /* __ia64__ */
+#endif
+
+/* Number of entries by which start-condition stack grows. */
+#ifndef YY_START_STACK_INCR
+#define YY_START_STACK_INCR 25
+#endif
+
+/* Default declaration of generated scanner - a define so the user can
+ * easily add parameters.
+ */
+#ifndef YY_DECL
+#define YY_DECL_IS_OURS 1
+
+extern int yylex (void);
+
+#define YY_DECL int yylex (void)
+#endif /* !YY_DECL */
+
+/* yy_get_previous_state - get the state just before the EOB char was reached */
+
+#undef YY_NEW_FILE
+#undef YY_FLUSH_BUFFER
+#undef yy_set_bol
+#undef yy_new_buffer
+#undef yy_set_interactive
+#undef YY_DO_BEFORE_ACTION
+
+#ifdef YY_DECL_IS_OURS
+#undef YY_DECL_IS_OURS
+#undef YY_DECL
+#endif
+
+#ifndef yy_create_buffer_ALREADY_DEFINED
+#undef yy_create_buffer
+#endif
+#ifndef yy_delete_buffer_ALREADY_DEFINED
+#undef yy_delete_buffer
+#endif
+#ifndef yy_scan_buffer_ALREADY_DEFINED
+#undef yy_scan_buffer
+#endif
+#ifndef yy_scan_string_ALREADY_DEFINED
+#undef yy_scan_string
+#endif
+#ifndef yy_scan_bytes_ALREADY_DEFINED
+#undef yy_scan_bytes
+#endif
+#ifndef yy_init_buffer_ALREADY_DEFINED
+#undef yy_init_buffer
+#endif
+#ifndef yy_flush_buffer_ALREADY_DEFINED
+#undef yy_flush_buffer
+#endif
+#ifndef yy_load_buffer_state_ALREADY_DEFINED
+#undef yy_load_buffer_state
+#endif
+#ifndef yy_switch_to_buffer_ALREADY_DEFINED
+#undef yy_switch_to_buffer
+#endif
+#ifndef yypush_buffer_state_ALREADY_DEFINED
+#undef yypush_buffer_state
+#endif
+#ifndef yypop_buffer_state_ALREADY_DEFINED
+#undef yypop_buffer_state
+#endif
+#ifndef yyensure_buffer_stack_ALREADY_DEFINED
+#undef yyensure_buffer_stack
+#endif
+#ifndef yylex_ALREADY_DEFINED
+#undef yylex
+#endif
+#ifndef yyrestart_ALREADY_DEFINED
+#undef yyrestart
+#endif
+#ifndef yylex_init_ALREADY_DEFINED
+#undef yylex_init
+#endif
+#ifndef yylex_init_extra_ALREADY_DEFINED
+#undef yylex_init_extra
+#endif
+#ifndef yylex_destroy_ALREADY_DEFINED
+#undef yylex_destroy
+#endif
+#ifndef yyget_debug_ALREADY_DEFINED
+#undef yyget_debug
+#endif
+#ifndef yyset_debug_ALREADY_DEFINED
+#undef yyset_debug
+#endif
+#ifndef yyget_extra_ALREADY_DEFINED
+#undef yyget_extra
+#endif
+#ifndef yyset_extra_ALREADY_DEFINED
+#undef yyset_extra
+#endif
+#ifndef yyget_in_ALREADY_DEFINED
+#undef yyget_in
+#endif
+#ifndef yyset_in_ALREADY_DEFINED
+#undef yyset_in
+#endif
+#ifndef yyget_out_ALREADY_DEFINED
+#undef yyget_out
+#endif
+#ifndef yyset_out_ALREADY_DEFINED
+#undef yyset_out
+#endif
+#ifndef yyget_leng_ALREADY_DEFINED
+#undef yyget_leng
+#endif
+#ifndef yyget_text_ALREADY_DEFINED
+#undef yyget_text
+#endif
+#ifndef yyget_lineno_ALREADY_DEFINED
+#undef yyget_lineno
+#endif
+#ifndef yyset_lineno_ALREADY_DEFINED
+#undef yyset_lineno
+#endif
+#ifndef yyget_column_ALREADY_DEFINED
+#undef yyget_column
+#endif
+#ifndef yyset_column_ALREADY_DEFINED
+#undef yyset_column
+#endif
+#ifndef yywrap_ALREADY_DEFINED
+#undef yywrap
+#endif
+#ifndef yyget_lval_ALREADY_DEFINED
+#undef yyget_lval
+#endif
+#ifndef yyset_lval_ALREADY_DEFINED
+#undef yyset_lval
+#endif
+#ifndef yyget_lloc_ALREADY_DEFINED
+#undef yyget_lloc
+#endif
+#ifndef yyset_lloc_ALREADY_DEFINED
+#undef yyset_lloc
+#endif
+#ifndef yyalloc_ALREADY_DEFINED
+#undef yyalloc
+#endif
+#ifndef yyrealloc_ALREADY_DEFINED
+#undef yyrealloc
+#endif
+#ifndef yyfree_ALREADY_DEFINED
+#undef yyfree
+#endif
+#ifndef yytext_ALREADY_DEFINED
+#undef yytext
+#endif
+#ifndef yyleng_ALREADY_DEFINED
+#undef yyleng
+#endif
+#ifndef yyin_ALREADY_DEFINED
+#undef yyin
+#endif
+#ifndef yyout_ALREADY_DEFINED
+#undef yyout
+#endif
+#ifndef yy_flex_debug_ALREADY_DEFINED
+#undef yy_flex_debug
+#endif
+#ifndef yylineno_ALREADY_DEFINED
+#undef yylineno
+#endif
+#ifndef yytables_fload_ALREADY_DEFINED
+#undef yytables_fload
+#endif
+#ifndef yytables_destroy_ALREADY_DEFINED
+#undef yytables_destroy
+#endif
+#ifndef yyTABLES_NAME_ALREADY_DEFINED
+#undef yyTABLES_NAME
+#endif
+
+#line 72 "mycc.l"
+
+
+#line 474 "lex.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

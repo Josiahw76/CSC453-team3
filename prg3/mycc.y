@@ -34,8 +34,22 @@ static struct ClassFile cf;
 %token <sym> BREAK DO ELSE FOR IF RETURN WHILE
 
 /* Declare operator tokens */
-/* TODO: TO BE COMPLETED WITH ASSOCIATIVITY AND PRECEDENCE DECLARATIONS */
 %token PA NA TA DA MA AA XA OA LA RA OR AN EQ NE LE GE LS RS AR PP NN
+
+/* associativity and precedence declarations */
+%right '=' PA NA TA DA MA AA XA OA LA RA
+%left OR
+%left AN
+%left '|'
+%left '^'
+%left '&'
+%left EQ NE
+%left '<' '>' LE GE
+%left LS RS
+%left '+' '-'
+%left '*' '/' '%'
+%right '!' '~'
+%left PP NN
 
 /* Declare attribute types for marker nonterminals, such as L M and N */
 /* TODO: TO BE COMPLETED WITH ADDITIONAL NONMARKERS AS NECESSARY */
@@ -90,29 +104,29 @@ expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
 	/* do the operation, dupe it, put back to id. */
 	/* Leaves the id on the stack for subsequent operations */
         | ID   PA  expr { emit2(iload, $1->localvar); emit(iadd); 
-				emit(dup); emit2(istore, $1->localvar) }
-        | ID   NA  expr { emit2(iload, $1->localvar); emit(isub); 
-				emit(dup); emit2(istore, $1->localvar) }
+				emit(dup); emit2(istore, $1->localvar); }
+        | ID   NA  expr { emit2(iload, $1->localvar); emit(swap); emit(isub); 
+				emit(dup); emit2(istore, $1->localvar); }
         | ID   TA  expr { emit2(iload, $1->localvar); emit(imul); 
-				emit(dup); emit2(istore, $1->localvar) }
-        | ID   DA  expr { emit2(iload, $1->localvar); emit(idiv); 
-				emit(dup); emit2(istore, $1->localvar) }
-        | ID   MA  expr { emit2(iload, $1->localvar); emit(irem); 
-				emit(dup); emit2(istore, $1->localvar) }
+				emit(dup); emit2(istore, $1->localvar); }
+        | ID   DA  expr { emit2(iload, $1->localvar); emit(swap); emit(idiv); 
+				emit(dup); emit2(istore, $1->localvar); }
+        | ID   MA  expr { emit2(iload, $1->localvar); emit(swap); emit(irem); 
+				emit(dup); emit2(istore, $1->localvar); }
         | ID   AA  expr { emit2(iload, $1->localvar); emit(iand); 
-				emit(dup); emit2(istore, $1->localvar) }
+				emit(dup); emit2(istore, $1->localvar); }
         | ID   XA  expr { emit2(iload, $1->localvar); emit(ixor); 
-				emit(dup); emit2(istore, $1->localvar) }
+				emit(dup); emit2(istore, $1->localvar); }
         | ID   OA  expr { emit2(iload, $1->localvar); emit(ior);
-				emit(dup); emit2(istore, $1->localvar) }
-        | ID   LA  expr { emit2(iload, $1->localvar); emit(ishl); 
-				emit(dup); emit2(istore, $1->localvar) }
-        | ID   RA  expr { emit2(iload, $1->localvar); emit(ishr); 
-				emit(dup); emit2(istore, $1->localvar) }
+				emit(dup); emit2(istore, $1->localvar); }
+        | ID   LA  expr { emit2(iload, $1->localvar); emit(swap); emit(ishl); 
+				emit(dup); emit2(istore, $1->localvar); }
+        | ID   RA  expr { emit2(iload, $1->localvar); emit(swap); emit(ishr); 
+				emit(dup); emit2(istore, $1->localvar); }
 
 	/* evaluates both terms. True short-circuit evaluation needs a marker non-terminal */
-        | expr OR  expr { emit3(ifne, pc+4); emit3(ifne, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
-        | expr AN  expr { emit3(ifeq, pc+4); emit3(ifeq, pc+3); emit(iconst_1); emit3(goto_, pc+2); emit(iconst_0); }
+        | expr OR  expr { emit(ior); emit3(ifne, 7); emit(iconst_0); emit3(goto_, 4); emit(iconst_1); }
+        | expr AN  expr { emit3(ifeq, 10); emit3(ifeq, 11); emit(iconst_1); emit3(goto_, 6); emit(pop); emit(iconst_0); }
 
         | expr '|' expr { emit(ior); }
         | expr '^' expr { emit(ixor); }
@@ -121,12 +135,12 @@ expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
 	/* If the evaluation is true, branch. Otherwise, flow continues. */
 	/* True should emit 1, false 0, so use offsets and jumps to */
 	/* emit the correct one. */
-        | expr EQ  expr { emit3(if_icmpeq, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
-        | expr NE  expr { emit3(if_icmpne, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
-        | expr '<' expr { emit3(if_icmplt, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
-        | expr '>' expr { emit3(if_icmpgt, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
-        | expr LE  expr { emit3(if_icmple, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
-        | expr GE  expr { emit3(if_icmpge, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
+        | expr EQ  expr { emit3(if_icmpeq, 7); emit(iconst_0); emit3(goto_, 4); emit(iconst_1); }
+        | expr NE  expr { emit3(if_icmpne, 7); emit(iconst_0); emit3(goto_, 4); emit(iconst_1); }
+        | expr '<' expr { emit3(if_icmplt, 7); emit(iconst_0); emit3(goto_, 4); emit(iconst_1); }
+        | expr '>' expr { emit3(if_icmpgt, 7); emit(iconst_0); emit3(goto_, 4); emit(iconst_1); }
+        | expr LE  expr { emit3(if_icmple, 7); emit(iconst_0); emit3(goto_, 4); emit(iconst_1); }
+        | expr GE  expr { emit3(if_icmpge, 7); emit(iconst_0); emit3(goto_, 4); emit(iconst_1); }
 	/* comparisons */
 
         | expr LS  expr { emit(ishl); }
@@ -138,17 +152,17 @@ expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
         | expr '%' expr { emit(irem); }
 
 	/* If true, emit false. If false, emit true. ifeq flows forward if value is 1, jumps if 0. */
-        | '!' expr      { emit3(ifeq, pc+3); emit(iconst_0); emit3(goto_, pc+2); emit(iconst_1); }
-        | '~' expr      { /* TODO: TO BE COMPLETED */ error("~ operator not implemented"); }	 { emit(); }
+        | '!' expr      { emit3(ifeq, 7); emit(iconst_0); emit3(goto_, 4); emit(iconst_1); }
+        | '~' expr      { /* TODO: TO BE COMPLETED */ error("~ operator not implemented"); }	 { /* emit(); */ }
         | '+' expr %prec '!' /* '+' at same precedence level as '!' */ { /* do nothing */ }
         | '-' expr %prec '!' /* '-' at same precedence level as '!' */ { emit(ineg); }
         | '(' expr ')'
         | '$' INT8      { emit(aload_1); emit2(bipush, $2); emit(iaload); }
-        | PP ID         { $2->localvar = $2->localvar + 1; emit($2->localvar); }
-        | NN ID         { $2->localvar = $2->localvar - 1; emit($2->localvar); }
-        | ID PP         { emit($1->localvar); $1->localvar = $1->localvar + 1; }
-        | ID NN         { emit($1->localvar); $1->localvar = $1->localvar - 1; }
-        | ID            { emit2(iload, $1->localvar); }
+	| PP ID { emit32(iinc, $2->localvar, 1); emit2(iload, $2->localvar); }
+	| NN ID { emit32(iinc, $2->localvar, -1); emit2(iload, $2->localvar); }
+	| ID PP { emit2(iload, $1->localvar); emit32(iinc, $1->localvar, 1); }
+	| ID NN { emit2(iload, $1->localvar); emit32(iinc, $1->localvar, -1); }        
+	| ID            { emit2(iload, $1->localvar); }
         | INT8          { emit2(bipush, $1); }
         | INT16         { emit3(sipush, $1); }
         | INT32         { emit2(ldc, constant_pool_add_Integer(&cf, $1)); }

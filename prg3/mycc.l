@@ -3,6 +3,7 @@
 %option noyywrap
 %option yylineno
 %option nounistd
+%option never-interactive
 
 %{
 
@@ -23,6 +24,9 @@ digit           [0-9]
 alpha           [a-zA-Z_]
 id              {alpha}({alpha}|{digit})*
 int             {digit}+
+hex		0[xX][0-9A-Fa-f]+
+chr		\'([^\'\\\n]|\\.)\'
+oct		0[0-7]+
 
 %%
 
@@ -35,9 +39,9 @@ int             {digit}+
 "//"[^\n]*					{/* inline comment */}
 
 {id}                           { return install_id(); }
-0[0-7]*(U|L|UL|LU)?            		{ return install_oct(); }
-0(x|X){digit|[A-Fa-f]}*(U|L|UL|LU)?	{ return install_hex(); }
-[\x00-\x7F]	 	       { return install_chr(); }
+{oct}           	       { return install_oct(); }
+{hex}			       { return install_hex(); }
+{chr}	   	 	       { return install_chr(); }
 {int}                          { return install_int(); }
 "+="                           { return PA; }
 "-="                           { return NA; }
@@ -69,7 +73,7 @@ int             {digit}+
 
 %%
 
-/* install_id - add identifier to symbol table if not already there and assign it a JVM local var index */
+	/* install_id - add identifier to symbol table if not already there and assign it a JVM local var index */
 static int install_id()
 {
 	yylval.sym = lookup(yytext);
@@ -83,7 +87,7 @@ static int install_id()
 	return yylval.sym->token;
 }
 
-/* install_int - convert decimal yytext[] to yylval.num and return INT8, INT16, or INT32 */
+	/* install_int - convert decimal yytext[] to yylval.num and return INT8, INT16, or INT32 */
 static int install_int()
 {
 	sscanf(yytext, "%u", &yylval.num);
@@ -97,7 +101,7 @@ static int install_int()
 	return INT32;
 }
 
-/* install_oct - convert octal yytext[] to yylval.num and return INT8, INT16, or INT32 */
+	/* install_oct - convert octal yytext[] to yylval.num and return INT8, INT16, or INT32 */
 static int install_oct()
 {
 	sscanf(yytext, "%o", &yylval.num);
@@ -129,7 +133,7 @@ static int install_hex()
 static int install_chr()
 {
 	/* not sure whether to write [0] or [1] */
-	sscanf(yytext[0], "%c", &yylval.num);
+	sscanf(&yytext[1], "%u", &yylval.num);
 
 	return INT8;
 }

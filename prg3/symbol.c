@@ -8,13 +8,13 @@
 
 #define SYMMAX 100
 
-struct symbol symtable[SYMMAX];
-int lastentry 0;
+Symbol symtable[SYMMAX];
+int lastentry = 0;
 
 Symbol *lookup(const char *s)
 {
     int p;
-    Symbol *rc;
+    Symbol *rc = NULL;
 
     for (p = 0; p < lastentry; p++) {
 	if (strcmp(symtable[p].lexptr, s) == 0) {
@@ -32,7 +32,7 @@ Symbol *insert(const char *s, int token)
 	error("symbol table full");
     }
 
-    symtable[lastentry].token = tok;
+    symtable[lastentry].token = token;
 
     symtable[lastentry].lexptr = (char *)malloc(strlen(s)+1);
     strcpy(symtable[lastentry].lexptr, s);
